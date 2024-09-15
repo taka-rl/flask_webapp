@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% block title %}Coffee and Wifi{% endblock %}
+
+{% block content %}
+<div class="jumbotron text-center">
+    <div class="container">
+        <h1 class="display-4">☕️ Coffee </h1>
+        <p class="lead">Want to work in a cafe?</p>
+        <hr class="my-4">
+        <p>You've found the right place! Checkout my collection of cafes with data on power socket availability, wifi speed and coffee quality.</p>
+        <a class="btn btn-warning btn-lg" href=" {{ url_for('show_cafes') }}" role="button">Show Me!</a>
+    </div>
+</div>
+
+<div class="jumbotron text-center">
+    <div class="container">
+        <h1 class="display-4">Weather </h1>
+        <p class="lead">Check the weather?</p>
+        <hr class="my-4">
+        <p>Here is the weather!</p>
+        <!-- Here is an input where he/she wants to check the weather-->
+        <form></form>
+        <a class="btn btn-warning btn-lg" href=" {{ url_for('show_weather') }}" role="button">Show Me!</a>
+    </div>
+</div>
+
+
+{% endblock %}
+
