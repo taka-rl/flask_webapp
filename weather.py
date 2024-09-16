@@ -1,9 +1,9 @@
 from typing import Any
 
 
-# API KEY
-# OpenWeather
+# API KEY OpenWeather
 WEATHER_API_KEY = 'Replace with your API key'
+
 
 def get_weather_info(location: str) -> dict[str, Any]:
     """
@@ -35,8 +35,8 @@ def get_weather_info(location: str) -> dict[str, Any]:
         # Print error message with status code
         print(f"Error: Unable to fetch data for {location}. HTTP Status code: {response.status_code}")
         if response.status_code == 401:
-            print("Unauthorized: Check if your API key is correct.")
+            return "Error: Unauthorized: Check if your API key is correct."
         elif response.status_code == 404:
-            print("City not found: Please check the city name and try again.")
+            return "Error: City not found: Please check the city name and try again."
         else:
-            print("An unexpected error occurred.")
+            return "Error: An unexpected error occurred."

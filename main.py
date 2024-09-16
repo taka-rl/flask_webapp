@@ -7,27 +7,15 @@ from wtforms import StringField, SubmitField
 from wtforms.validators import DataRequired, URL
 from flask_bootstrap import Bootstrap5
 from weather import get_weather_info
+from dotenv import load_dotenv
+import os
 
-'''
-- Architecture: 
-index.html: 
-today and the whole week weather forecast
-today and previous rate currency between Yen and Forint
-Add restaurants/cafes buttons: 2 ways using Google Map API and manually, respectively
--> add_restaurant.html
--> add_cafe.html
-Show restaurants/cafes buttons
--> restaurants.html: 
-   cafes.html: 
 
-Edit/delete database
-
-embed chatbot
-
-'''
+# Load environment variables from .env file
+load_dotenv()
 
 app = Flask(__name__)
-app.config['SECRET_KEY'] = '8BYkEfBA6O6donzWlSihBXox7C0sKR6b'
+app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
 Bootstrap5(app)
 
 
@@ -40,7 +28,7 @@ db = SQLAlchemy(model_class=Base)
 
 
 # configure the SQLite database, relative to the app instance folder
-app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///cafe-collection.db"
+app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('SQLALCHEMY_DATABASE_URI')
 # initialize the app with the extension
 db.init_app(app)
 
@@ -138,9 +126,7 @@ def delete():
 def show_weather():
     if request.method == "POST":
         location = request.form["loc"]
-
         weather_data = get_weather_info(location)
-        print(weather_data)
 
     return render_template('weather.html', loc=location, weather_data=weather_data)
 
