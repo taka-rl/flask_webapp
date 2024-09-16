@@ -1,6 +1,9 @@
 from typing import Any
-from param import WEATHER_API_KEY
 
+
+# API KEY
+# OpenWeather
+WEATHER_API_KEY = 'Replace with your API key'
 
 def get_weather_info(location: str) -> dict[str, Any]:
     """
@@ -23,9 +26,9 @@ def get_weather_info(location: str) -> dict[str, Any]:
     if response.status_code == 200:
         data = response.json()  # Parse the JSON response
 
-        weather_data = {'Temperature': data['main']['temp'], 'Wind Speed': data['wind']['speed'],
-                        'Pressure': data['main']['pressure'], 'Humidity': data['main']['humidity'],
-                        'Description': data['weather'][0]['description']}
+        weather_data = {'temperature': data['main']['temp'], 'wind_speed': data['wind']['speed'],
+                        'pressure': data['main']['pressure'], 'humidity': data['main']['humidity'],
+                        'description': data['weather'][0]['description']}
 
         return weather_data
     else:

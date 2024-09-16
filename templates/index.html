@@ -17,10 +17,10 @@
         <h1 class="display-4">Weather </h1>
         <p class="lead">Check the weather?</p>
         <hr class="my-4">
-        <p>Here is the weather!</p>
-        <!-- Here is an input where he/she wants to check the weather-->
-        <form></form>
-        <a class="btn btn-warning btn-lg" href=" {{ url_for('show_weather') }}" role="button">Show Me!</a>
+        <form method="post" action="{{ url_for('show_weather') }}">
+            <input name="loc" type="text" placeholder="Input the location..." required>
+            <button type="submit">Check the wearther!</button>
+        </form>
     </div>
 </div>
 

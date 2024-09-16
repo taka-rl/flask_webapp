@@ -134,12 +134,15 @@ def delete():
     return redirect(url_for('home'))
 
 
-@app.route('/weather/<str: location>', methods=["POST", "GET"])
-def show_weather(location):
+@app.route('/weather', methods=["POST", "GET"])
+def show_weather():
+    if request.method == "POST":
+        location = request.form["loc"]
 
-    weather_data = get_weather_info(location)
+        weather_data = get_weather_info(location)
+        print(weather_data)
 
-    return render_template('weather.html', weather_data=weather_data)
+    return render_template('weather.html', loc=location, weather_data=weather_data)
 
 
 if __name__ == "__main__":

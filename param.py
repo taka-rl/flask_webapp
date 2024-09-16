@@ -1,3 +1,0 @@
-
-# API KEY
-WEATHER_API_KEY = ''

@@ -4,20 +4,17 @@
 {% block content %}
 
 <div class="container">
-  <div class="row">
-    <div class="col-sm-12">
-
-      <h1>Weather</h1>
-        <div class="container">
-            <h2>Today's weather</h2>
-
-            <h2>This week weather</h2>
-
-        </div>
-
-
+    <h1>Weather</h1>
+    <div class="container">
+        <h2>Today's weather in {{ loc }}</h2>
+            <p>Temperature: {{ weather_data.temperature }}</p>
+            <p>Wind Speed: {{ weather_data.wind_speed }}</p>
+            <p>Pressure: {{ weather_data.pressure }}</p>
+            <p>Humidity: {{ weather_data.humidity }}</p>
+            <p>Description: {{ weather_data.description }}</p>
     </div>
-  </div>
+    <p><a href="{{ url_for('home') }}">Return to index page</a></p>
 </div>
+
 
 {% endblock %}
