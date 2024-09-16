@@ -11,6 +11,9 @@
             <p>{{ weather_data }}</p>
         {% else %}
             <p>Temperature: {{ weather_data.temperature }}</p>
+            <p>Max Temperature: {{ weather_data.max_temperature }}</p>
+            <p>Min Temperature: {{ weather_data.min_temperature }}</p>
+            <p>Feels like: {{ weather_data.feel_temperature }}</p>
             <p>Wind Speed: {{ weather_data.wind_speed }}</p>
             <p>Pressure: {{ weather_data.pressure }}</p>
             <p>Humidity: {{ weather_data.humidity }}</p>
