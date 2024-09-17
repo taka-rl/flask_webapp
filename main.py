@@ -7,6 +7,7 @@ from wtforms import StringField, SubmitField
 from wtforms.validators import DataRequired, URL
 from flask_bootstrap import Bootstrap5
 from weather import get_weather_info
+from currency import get_currency_info
 from dotenv import load_dotenv
 import os
 
@@ -131,5 +132,12 @@ def show_weather():
     return render_template('weather.html', loc=location, weather_data=weather_data)
 
 
+@app.route('/currency', methods=["POST"])
+def get_currency():
+    currency_data = get_currency_info()
+    return currency_data
+
+
 if __name__ == "__main__":
     app.run(debug=True)
+    get_currency()

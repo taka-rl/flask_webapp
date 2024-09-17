@@ -24,6 +24,17 @@
     </div>
 </div>
 
+<div class="jumbotron text-center">
+    <div class="container">
+        <h1 class="display-4">Currency </h1>
+        <p class="lead">Check the currency exchange rate?</p>
+        <p class="lead">Between Japanese Yen and Hungarian Forint</p>
+        <hr class="my-4">
+        <form method="post" action="{{ url_for('get_currency') }}">
+            <button type="submit">Check the currency exchange rate!</button>
+        </form>
+    </div>
+</div>
 
 {% endblock %}
 
