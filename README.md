@@ -1,5 +1,5 @@
 # About
-This is a web app where I have utilized gained skills and knowledge in Flask, Database, RESTful API and Python during my self-study.
+This is a web app where I have been utilizing gained skills and knowledge in Flask, Database, RESTful API and Python while learning them by myself.
 
 ## Stacked tech
 - Python
@@ -16,4 +16,7 @@ This is a web app where I have utilized gained skills and knowledge in Flask, Da
 - Improve the web page design
 - Show some posts/create a post
 - Introduce a chatbot
+- Add a contact page
+- Deploy the web page
+  
   
