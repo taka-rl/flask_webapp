@@ -1,27 +1,41 @@
-{% extends 'base.html' %}
-{% block title %}Weather{% endblock %}
+{% include "header.html" %}
+
+<!-- Page Header-->
+<header
+  class="masthead"
+  style="background-image: url('../static/assets/img/weather-bg.jpg')"
+>
+  <div class="container position-relative px-4 px-lg-5">
+    <div class="row gx-4 gx-lg-5 justify-content-center">
+      <div class="col-md-10 col-lg-8 col-xl-7">
+        <div class="page-heading">
+          <h1>Weather forecast</h1>
+          <span class="subheading"></span>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
 
 {% block content %}
-
 <div class="container">
-    <h1>Weather</h1>
-    <div class="container">
-        <h2>Today's weather in {{ loc }}</h2>
-        {% if "Error" in weather_data %}
-            <p>{{ weather_data }}</p>
-        {% else %}
-            <p>Temperature: {{ weather_data.temperature }}</p>
-            <p>Max Temperature: {{ weather_data.max_temperature }}</p>
-            <p>Min Temperature: {{ weather_data.min_temperature }}</p>
-            <p>Feels like: {{ weather_data.feel_temperature }}</p>
-            <p>Wind Speed: {{ weather_data.wind_speed }}</p>
-            <p>Pressure: {{ weather_data.pressure }}</p>
-            <p>Humidity: {{ weather_data.humidity }}</p>
-            <p>Description: {{ weather_data.description }}</p>
-        {% endif %}
-    </div>
-    <p><a href="{{ url_for('home') }}">Return to index page</a></p>
+    <h2>Today's weather in {{ loc }}</h2>
+    {% if "Error" in weather_data %}
+    <p>{{ weather_data }}</p>
+    {% else %}
+    <p>Temperature: {{ weather_data.temperature }}</p>
+    <p>Max Temperature: {{ weather_data.max_temperature }}</p>
+    <p>Min Temperature: {{ weather_data.min_temperature }}</p>
+    <p>Feels like: {{ weather_data.feel_temperature }}</p>
+    <p>Wind Speed: {{ weather_data.wind_speed }}</p>
+    <p>Pressure: {{ weather_data.pressure }}</p>
+    <p>Humidity: {{ weather_data.humidity }}</p>
+    <p>Description: {{ weather_data.description }}</p>
+    {% endif %}
+    <p><a href="{{ url_for('useful_info') }}">Return to Useful Info page</a></p>
 </div>
 
 
 {% endblock %}
+{% include "footer.html" %}
+

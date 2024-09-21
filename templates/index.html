@@ -1,40 +1,65 @@
-{% extends 'base.html' %}
-{% block title %}Coffee and Weather{% endblock %}
+{% include "header.html" %}
 
-{% block content %}
-<div class="jumbotron text-center">
-    <div class="container">
-        <h1 class="display-4">☕️ Coffee </h1>
-        <p class="lead">Want to work in a cafe?</p>
-        <hr class="my-4">
-        <p>You've found the right place! Checkout my collection of cafes with data on power socket availability, wifi speed and coffee quality.</p>
-        <a class="btn btn-warning btn-lg" href=" {{ url_for('show_cafes') }}" role="button">Show Me!</a>
+<!-- Page Header-->
+<header
+  class="masthead"
+  style="background-image: url('../static/assets/img/home-bg.jpg')"
+>
+  <div class="container position-relative px-4 px-lg-5">
+    <div class="row gx-4 gx-lg-5 justify-content-center">
+      <div class="col-md-10 col-lg-8 col-xl-7">
+        <div class="site-heading">
+          <h1>Takataka's Blog</h1>
+          <span class="subheading">--- A collection of random things ---</span>
+        </div>
+      </div>
     </div>
+  </div>
+</header>
+<!-- Main Content-->
+<div class="container px-4 px-lg-5">
+  <div class="row gx-4 gx-lg-5 justify-content-center">
+    <div class="col-md-10 col-lg-8 col-xl-7">
+      <!-- Post preview-->
+      {% for post in all_posts %}
+      <div class="post-preview">
+        <a href="{{ url_for('show_post', post_id=post.id) }}">
+          <h2 class="post-title">{{ post.title }}</h2>
+          <h3 class="post-subtitle">{{ post.subtitle }}</h3>
+        </a>
+        <p class="post-meta">
+          Posted by
+          <a href="#">{{post.author.name}}</a>
+          on {{post.date}}
+          <!-- Only show delete button if user id is 1 (admin user) -->
+          {% if current_user.id == 1: %}
+          <a href="{{url_for('delete_post', post_id=post.id) }}">✘</a>
+          {% endif %}
+        </p>
+      </div>
+      <!-- Divider-->
+      <hr class="my-4" />
+      {% endfor %}
+
+      <!-- New Post -->
+      <!-- Only show Create Post button if user id is 1 (admin user) -->
+      {% if current_user.id == 1 %}
+      <div class="d-flex justify-content-end mb-4">
+        <a
+          class="btn btn-primary float-right"
+          href="{{url_for('add_new_post')}}"
+          >Create New Post</a
+        >
+      </div>
+      {% endif %}
+
+      <!-- Pager-->
+      <div class="d-flex justify-content-end mb-4">
+        <a class="btn btn-secondary text-uppercase" href="#!">Older Posts →</a>
+      </div>
+
+    </div>
+  </div>
 </div>
 
-<div class="jumbotron text-center">
-    <div class="container">
-        <h1 class="display-4">Weather </h1>
-        <p class="lead">Check the weather?</p>
-        <hr class="my-4">
-        <form method="post" action="{{ url_for('show_weather') }}">
-            <input name="loc" type="text" placeholder="Input the location..." required>
-            <button type="submit">Check the wearther!</button>
-        </form>
-    </div>
-</div>
-
-<div class="jumbotron text-center">
-    <div class="container">
-        <h1 class="display-4">Currency </h1>
-        <p class="lead">Check the currency exchange rate?</p>
-        <p class="lead">Between Japanese Yen and Hungarian Forint</p>
-        <hr class="my-4">
-        <form method="post" action="{{ url_for('get_currency') }}">
-            <button type="submit">Check the currency exchange rate!</button>
-        </form>
-    </div>
-</div>
-
-{% endblock %}
-
+{% include "footer.html" %}

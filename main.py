@@ -1,47 +1,110 @@
-from flask import Flask, render_template, request, redirect, url_for
-from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
-from sqlalchemy import Integer, String, Float
-from flask_wtf import FlaskForm
-from wtforms import StringField, SubmitField
-from wtforms.validators import DataRequired, URL
+from datetime import date
+from flask import Flask, abort, render_template, redirect, url_for, flash, request
 from flask_bootstrap import Bootstrap5
+from flask_ckeditor import CKEditor
+# from flask_gravatar import Gravatar
+from flask_login import UserMixin, login_user, LoginManager, current_user, logout_user
+from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy.orm import relationship, DeclarativeBase, Mapped, mapped_column
+from sqlalchemy import Integer, String, Text, Float
+from functools import wraps
+from werkzeug.security import generate_password_hash, check_password_hash
+from forms import CreatePostForm, RegisterForm, LoginForm, CommentForm, CafeForm, RateCafeForm
 from weather import get_weather_info
 from currency import get_currency_info
 from dotenv import load_dotenv
 import os
-
 
 # Load environment variables from .env file
 load_dotenv()
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
+ckeditor = CKEditor(app)
 Bootstrap5(app)
 
+# Configure Flask-Login
+login_manager = LoginManager()
+login_manager.init_app(app)
 
-# Database
+
+@login_manager.user_loader
+def load_user(user_id):
+    return db.get_or_404(User, user_id)
+
+
+# CREATE DATABASE
 class Base(DeclarativeBase):
     pass
 
 
-db = SQLAlchemy(model_class=Base)
-
-
-# configure the SQLite database, relative to the app instance folder
 app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('SQLALCHEMY_DATABASE_URI')
-# initialize the app with the extension
+db = SQLAlchemy(model_class=Base)
 db.init_app(app)
 
 
-class Restaurants(db.Model):
+# CONFIGURE TABLES
+class User(UserMixin, db.Model):
+    __tablename__ = "users"
+    id: Mapped[int] = mapped_column(Integer, primary_key=True)
+    email: Mapped[str] = mapped_column(String(100), unique=True)
+    password: Mapped[str] = mapped_column(String(100))
+    name: Mapped[str] = mapped_column(String(100))
+
+    # This will act like a List of BlogPost objects attached to each User.
+    # The "author" refers to the author property in the BlogPost class.
+    posts = relationship("BlogPost", back_populates="author")
+
+    # *******Add parent relationship*******#
+    # "comment_author" refers to the comment_author property in the Comment class.
+    comments = relationship("Comment", back_populates="comment_author")
+
+
+class BlogPost(db.Model):
+    __tablename__ = "blog_posts"
+    id: Mapped[int] = mapped_column(Integer, primary_key=True)
+
+    # Create Foreign Key, "user.id" the users refers to the tablename of User.
+    author_id: Mapped[int] = mapped_column(Integer, db.ForeignKey("users.id"))
+    # Create reference to the User object. The "posts" refers to the posts property in the User class.
+    author = relationship("User", back_populates="posts")
+
+    title: Mapped[str] = mapped_column(String(250), unique=True, nullable=False)
+    subtitle: Mapped[str] = mapped_column(String(250), nullable=False)
+    date: Mapped[str] = mapped_column(String(250), nullable=False)
+    body: Mapped[str] = mapped_column(Text, nullable=False)
+    img_url: Mapped[str] = mapped_column(String(250), nullable=False)
+
+    # ***************Parent Relationship*************#
+    comments = relationship("Comment", back_populates="parent_post")
+
+
+class Comment(db.Model):
+    __tablename__ = "comments"
+    id: Mapped[int] = mapped_column(Integer, primary_key=True)
+
+    # *******Add child relationship******* #
+    # "users.id" The users refers to the tablename of the Users class.
+    # "comments" refers to the comments property in the User class.
+    author_id: Mapped[int] = mapped_column(Integer, db.ForeignKey("users.id"))
+    comment_author = relationship("User", back_populates="comments")
+
+    # ***************Child Relationship*************#
+    post_id: Mapped[int] = mapped_column(Integer, db.ForeignKey("blog_posts.id"))
+    parent_post = relationship("BlogPost", back_populates="comments")
+    text: Mapped[str] = mapped_column(Text, nullable=False)
+
+
+class Restaurant(db.Model):
+    __tablename__ = "restaurants"
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
     title: Mapped[str] = mapped_column(String(250), unique=True, nullable=False)
     author: Mapped[str] = mapped_column(String(250), nullable=False)
     rating: Mapped[float] = mapped_column(Float, nullable=False)
 
 
-class Cafes(db.Model):
+class Cafe(db.Model):
+    __tablename__ = "cafes"
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
     name: Mapped[str] = mapped_column(String(250), unique=True, nullable=False)
     location: Mapped[str] = mapped_column(String(250), nullable=False)
@@ -54,31 +117,186 @@ with app.app_context():
     db.create_all()
 
 
-# WTForms
-class CafeForm(FlaskForm):
-    name = StringField('Cafe Name', validators=[DataRequired()])
-    location = StringField('Cafe Location on Google Map', validators=[DataRequired(), URL(message="Invalid URL")])
-    open_time = StringField('Opening Time e.g. 8AM')
-    close_time = StringField('Closing Time e.g. 4:30PM')
-    rating = StringField('Cafe Rating e.g. 9.5 out of 10')
-
-    submit = SubmitField('Submit')
-
-
-class RateCafeForm(FlaskForm):
-    rating = StringField("Cafe Rating e.g. 9.5 out of 10", validators=[DataRequired()])
-    submit = SubmitField('Submit')
+def admin_only(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        # If id is not 1 then return abort with 403 error
+        if current_user.id != 1:
+            return abort(code=403)
+        # Otherwise continue with the route function
+        return f(*args, **kwargs)
+    return decorated_function
 
 
-# Flask app
+# Use Werkzeug to hash the user's password when creating a new user.
+@app.route('/register', methods=["POST", "GET"])
+def register():
+    form = RegisterForm()
+    if form.validate_on_submit():
+        # Find user by email entered if it's already existed or not
+        email = form.email.data
+        user = db.session.execute(db.select(User).where(User.email == email)).scalar()
+
+        if user:
+            flash("You've already sighed up with that email, login instead!")
+            return redirect(url_for('login'))
+
+        else:
+            hash_and_salted_password = generate_password_hash(password=form.password.data,
+                                                              method='pbkdf2:sha256',
+                                                              salt_length=8)
+            new_user = User(email=form.email.data,
+                            password=hash_and_salted_password,
+                            name=form.name.data)
+
+            db.session.add(new_user)
+            db.session.commit()
+
+            # Log in and authenticate user after adding details to database
+            login_user(new_user)
+
+            return redirect(url_for('get_all_posts'))
+
+    return render_template('register.html', form=form, current_user=current_user)
+
+
+# Retrieve a user from the database based on their email.
+@app.route('/login', methods=["POST", "GET"])
+def login():
+    form = LoginForm()
+    if form.validate_on_submit():
+        email = form.email.data
+        password = form.password.data
+
+        # Find user by email entered
+        user = db.session.execute(db.select(User).where(User.email == email)).scalar()
+
+        # Check stored password hash against entered password hashed
+        if not user:
+            flash("That email does not exist, please try again!")
+            return redirect(url_for('login'))
+        elif not check_password_hash(user.password, password):
+            flash("Password incorrect, please try again!")
+            return redirect(url_for('login'))
+        else:
+            login_user(user)
+            return redirect(url_for('get_all_posts'))
+
+    return render_template("login.html", form=form, current_user=current_user)
+
+
+@app.route('/logout')
+def logout():
+    logout_user()
+    return redirect(url_for('get_all_posts'))
+
+
 @app.route('/')
-def home():
-    return render_template('index.html')
+def get_all_posts():
+    result = db.session.execute(db.select(BlogPost))
+    posts = result.scalars().all()
+    return render_template("index.html", all_posts=posts, current_user=current_user)
+
+
+# Allow logged-in users to comment on posts
+@app.route("/post/<int:post_id>", methods=["GET", "POST"])
+def show_post(post_id):
+    requested_post = db.get_or_404(BlogPost, post_id)
+    comment_form = CommentForm()
+
+    if comment_form.validate_on_submit():
+        if not current_user.is_authenticated:
+            flash("You need to login or register to comment.")
+            return redirect(url_for("login"))
+
+        new_comment = Comment(text=comment_form.comment_text.data,
+                              comment_author=current_user,
+                              parent_post=requested_post)
+        db.session.add(new_comment)
+        db.session.commit()
+
+    return render_template("post.html",
+                           post=requested_post,
+                           current_user=current_user,
+                           form=comment_form)
+
+
+# Use a decorator so only an admin user can create a new post
+@app.route("/new-post", methods=["GET", "POST"])
+@admin_only
+def add_new_post():
+    form = CreatePostForm()
+    if form.validate_on_submit():
+        new_post = BlogPost(
+            title=form.title.data,
+            subtitle=form.subtitle.data,
+            body=form.body.data,
+            img_url=form.img_url.data,
+            author=current_user,
+            date=date.today().strftime("%B %d, %Y")
+        )
+        db.session.add(new_post)
+        db.session.commit()
+        return redirect(url_for("get_all_posts"))
+    return render_template("make-post.html", form=form)
+
+
+# Use a decorator so only an admin user can edit a post
+@app.route("/edit-post/<int:post_id>", methods=["GET", "POST"])
+@admin_only
+def edit_post(post_id):
+    post = db.get_or_404(BlogPost, post_id)
+    edit_form = CreatePostForm(
+        title=post.title,
+        subtitle=post.subtitle,
+        img_url=post.img_url,
+        author=post.author,
+        body=post.body
+    )
+    if edit_form.validate_on_submit():
+        post.title = edit_form.title.data
+        post.subtitle = edit_form.subtitle.data
+        post.img_url = edit_form.img_url.data
+        post.author = current_user
+        post.body = edit_form.body.data
+        db.session.commit()
+        return redirect(url_for("show_post", post_id=post.id))
+    return render_template("make-post.html", form=edit_form, is_edit=True)
+
+
+# Use a decorator so only an admin user can delete a post
+@app.route("/delete/<int:post_id>")
+@admin_only
+def delete_post(post_id):
+    post_to_delete = db.get_or_404(BlogPost, post_id)
+    db.session.delete(post_to_delete)
+    db.session.commit()
+    return redirect(url_for('get_all_posts'))
+
+
+@app.route("/about")
+def about():
+    return render_template("about.html")
+
+
+@app.route("/hobby")
+def hobby():
+    return render_template("hobby.html")
+
+
+@app.route("/useful_info")
+def useful_info():
+    return render_template("useful_info.html")
+
+
+@app.route("/contact")
+def contact():
+    return render_template("contact.html")
 
 
 @app.route('/cafes')
 def show_cafes():
-    all_cafes = db.session.execute(db.select(Cafes).order_by(Cafes.id)).scalars().all()
+    all_cafes = []
     return render_template('cafes.html', cafes=all_cafes)
 
 
@@ -86,22 +304,21 @@ def show_cafes():
 def add_cafe():
     form = CafeForm()
     if form.validate_on_submit():
-        cafe = Cafes(name=form.name.data,
-                     location=form.location.data,
-                     open_time=form.open_time.data,
-                     close_time=form.close_time.data,
-                     rating=form.rating.data)
+        cafe = Cafe(name=form.name.data,
+                    location=form.location.data,
+                    open_time=form.open_time.data,
+                    close_time=form.close_time.data,
+                    rating=form.rating.data)
         db.session.add(cafe)
         db.session.commit()
         return redirect(url_for('home'))
     return render_template("add.html", form=form)
 
 
-@app.route('/edit', methods=["POST", "GET"])
-def edit():
+@app.route('/edit/<int:cafe_id>', methods=["POST", "GET"])
+def edit_cafe(cafe_id):
     form = RateCafeForm()
-    cafe_id = request.args.get("id")
-    cafe = db.get_or_404(Cafes, cafe_id)  # to check if the movie_id exists among Movie database.
+    cafe = db.get_or_404(Cafe, cafe_id)  # to check if the movie_id exists among Movie database.
     if form.validate_on_submit():
         cafe.rating = float(form.rating.data)
         db.session.commit()  # Commit the changes
@@ -109,11 +326,10 @@ def edit():
     return render_template('edit.html', cafe=cafe, form=form)
 
 
-@app.route('/delete')
-def delete():
+@app.route('/delete/<int:cafe_id>')
+def delete_cafe(cafe_id):
     print("access")
-    cafe_id = request.args.get("id")
-    cafe = db.get_or_404(Cafes, cafe_id)
+    cafe = db.get_or_404(Cafe, cafe_id)
     print(cafe_id)
     if not cafe == 404:
         db.session.delete(cafe)
@@ -139,5 +355,4 @@ def get_currency():
 
 
 if __name__ == "__main__":
-    app.run(debug=True)
-    get_currency()
+    app.run(debug=True, port=5002)

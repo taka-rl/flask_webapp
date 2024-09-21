@@ -1,16 +1,30 @@
-{% extends 'base.html' %}
+{% include "header.html" %}
 <!--Don't forget your import here-->
 {% from 'bootstrap5/form.html' import render_form %}
 
-{% block title %}Add A New Cafe{% endblock %}
+<!-- Page Header-->
+<header
+  class="masthead"
+  style="background-image: url('../static/assets/img/about-bg.jpg')"
+>
+  <div class="container position-relative px-4 px-lg-5">
+    <div class="row gx-4 gx-lg-5 justify-content-center">
+      <div class="col-md-10 col-lg-8 col-xl-7">
+        <div class="page-heading">
+          <h1>Add a new cafe</h1>
+          <span class="subheading">collect your favorite cafe!</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+<!-- Post Content -->
+
 
 {% block content %}
 <div class="container">
   <div class="row">
     <div class="col-sm-12 col-md-8">
-
-      <h1>Add a new cafe into the database</h1>
-
       <!-- Bootstrap-Flask  -->
        {{ render_form(form, novalidate=True) }}
 
@@ -21,3 +35,5 @@
 </div>
 
 {% endblock %}
+
+{% include "footer.html" %}

@@ -1,14 +1,27 @@
-{% extends 'base.html' %}
-{% block title %}Restaurants{% endblock %}
+{% include "header.html" %}
+
+<!-- Page Header-->
+<header
+  class="masthead"
+  style="background-image: url('../static/assets/img/about-bg.jpg')"
+>
+  <div class="container position-relative px-4 px-lg-5">
+    <div class="row gx-4 gx-lg-5 justify-content-center">
+      <div class="col-md-10 col-lg-8 col-xl-7">
+        <div class="page-heading">
+          <h1>All Cafes</h1>
+          <span class="subheading"></span>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
 
 {% block content %}
 
 <div class="container">
   <div class="row">
     <div class="col-sm-12">
-
-      <h1>All Cafes</h1>
-
 	  <table class="table table-dark table-striped table-hover">
             <tr>
                 <td>Name</td>
@@ -24,13 +37,13 @@
                 <td>{{ cafe.open_time }}</td>
                 <td>{{ cafe.close_time }}</td>
                 <td>{{ cafe.rating }}</td>
-                <td><a href="{{ url_for('edit', id=cafe.id) }}">Edit</a></td>
-                <td><a href="{{ url_for('delete', id=cafe.id) }}">Delete</a></td>
+                <td><a href="{{ url_for('edit_cafe', id=cafe.id) }}">Edit</a></td>
+                <td><a href="{{ url_for('delete_cafe', id=cafe.id) }}">Delete</a></td>
             </tr>
           {% endfor %}
   	  </table>
 
-      <p><a href="{{ url_for('home') }}">Return to index page</a></p>
+      <p><a href="{{ url_for('show_cafes') }}">Return to index page</a></p>
         <p><a href="{{ url_for('add_cafe') }}">Would you like to add a cafe?</a></p>
 
     </div>
@@ -38,3 +51,5 @@
 </div>
 
 {% endblock %}
+
+{% include "footer.html" %}

@@ -1,0 +1,48 @@
+{% include "header.html" %}
+
+<!-- Page Header-->
+<header
+  class="masthead"
+  style="background-image: url('../static/assets/img/hobby-bg.jpg')"
+>
+  <div class="container position-relative px-4 px-lg-5">
+    <div class="row gx-4 gx-lg-5 justify-content-center">
+      <div class="col-md-10 col-lg-8 col-xl-7">
+        <div class="page-heading">
+          <h1>Hobby</h1>
+          <span class="subheading">These are what I love</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+<!-- Main Content-->
+<main class="mb-4">
+  <div class="container px-4 px-lg-5">
+    <div class="row gx-4 gx-lg-5 justify-content-center">
+      <div class="col-md-10 col-lg-8 col-xl-7">
+        <div class="container">
+        <h2 class=""> Coffee  ️️</h2>
+        <p class="lead">Want to increase your productivity in a great cafe?</p>
+        <p>Checkout my collection of cafes!</p>
+        <a class="btn btn-warning btn-lg" href=" {{ url_for('show_cafes') }}" role="button">Show Me!</a>
+        <div class="d-flex justify-content-end mb-4"></div>
+      </div>
+
+       <!-- Divider-->
+      <hr class="my-4" />
+
+      <div class="container">
+        <h2 class=""> Restaurant  ️️</h2>
+        <p class="lead">Want to satisfy your appetite?</p>
+        <p>Checkout my collection of restaurants! You'll find exactly what you want!</p>
+
+        <a class="btn btn-warning btn-lg" href="" role="button">Under development now</a>
+        <div class="d-flex justify-content-end mb-4"></div>
+      </div>
+      </div>
+    </div>
+  </div>
+</main>
+
+{% include "footer.html" %}
