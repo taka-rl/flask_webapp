@@ -8,7 +8,7 @@ from sqlalchemy.orm import relationship, DeclarativeBase, Mapped, mapped_column
 from sqlalchemy import Integer, String, Text, Float
 from functools import wraps
 from werkzeug.security import generate_password_hash, check_password_hash
-from forms import CreatePostForm, RegisterForm, LoginForm, CommentForm, CafeForm, RateCafeForm
+from forms import CreatePostForm, RegisterForm, LoginForm, CommentForm, CreatePlaceForm
 from weather import get_weather_info
 from currency import get_currency_info
 from dotenv import load_dotenv
@@ -103,6 +103,7 @@ class Place(db.Model):
     location: Mapped[str] = mapped_column(String(50), nullable=False)
     open_time: Mapped[str] = mapped_column(String(10), nullable=True)
     close_time: Mapped[str] = mapped_column(String(10), nullable=True)
+    pricing: Mapped[float] = mapped_column(String(15), nullable=True)
     rating: Mapped[float] = mapped_column(Float, nullable=True)
     category: Mapped[str] = mapped_column(String(15), nullable=True)
     location_url: Mapped[str] = mapped_column(String(250), nullable=True)
@@ -231,7 +232,7 @@ def add_new_post():
             subtitle=form.subtitle.data,
             body=form.body.data,
             img_url=form.img_url.data,
-            author=current_user,
+            blog_author=current_user,
             date=date.today().strftime("%B %d, %Y")
         )
         db.session.add(new_post)
@@ -249,7 +250,7 @@ def edit_post(post_id):
         title=post.title,
         subtitle=post.subtitle,
         img_url=post.img_url,
-        author=post.author,
+        blog_author=post.blog_author,
         body=post.body
     )
     if edit_form.validate_on_submit():
@@ -295,34 +296,57 @@ def contact():
 
 @app.route('/places')
 def show_places():
-    all_places = []
+    result = db.session.execute(db.select(Place))
+    all_places = result.scalars().all()
     return render_template('places.html', places=all_places)
 
 
 @app.route("/add-place", methods=["POST", "GET"])
 def add_place():
-    form = CafeForm()
+    form = CreatePlaceForm()
     if form.validate_on_submit():
         place = Place(name=form.name.data,
                       location=form.location.data,
+                      location_url=form.location_url.data,
                       open_time=form.open_time.data,
                       close_time=form.close_time.data,
-                      rating=form.rating.data)
+                      rating=form.rating.data,
+                      pricing=form.pricing.data,
+                      category=form.category.data,
+                      place_author=current_user)
         db.session.add(place)
         db.session.commit()
-        return redirect(url_for('home'))
+        return redirect(url_for('show_places'))
     return render_template("add-place.html", form=form)
 
 
 @app.route('/edit-place/<int:place_id>', methods=["POST", "GET"])
 def edit_place(place_id):
-    form = RateCafeForm()
-    cafe = db.get_or_404(Place, place_id)  # to check if the movie_id exists among Movie database.
-    if form.validate_on_submit():
-        cafe.rating = float(form.rating.data)
+    place = db.get_or_404(Place, place_id)
+
+    edit_form = CreatePlaceForm(
+        name=place.name,
+        location=place.location,
+        location_url=place.location_url,
+        open_time=place.open_time,
+        close_time=place.close_time,
+        rating=place.rating,
+        pricing=place.pricing,
+        category=place.category)
+
+    if edit_form.validate_on_submit():
+        place.name = edit_form.name.data
+        place.location = edit_form.location.data
+        place.location_url = edit_form.location_url.data
+        place.open_time = edit_form.open_time.data
+        place.close_time = edit_form.close_time.data
+        place.rating = edit_form.rating.data
+        place.pricing = edit_form.pricing.data
+        place.category = edit_form.category.data
+
         db.session.commit()  # Commit the changes
-        return redirect(url_for('get_all_posts'))
-    return render_template('edit-place.html', cafe=cafe, form=form)
+        return redirect(url_for('show_places'))
+    return render_template('edit-place.html', place=place, form=edit_form)
 
 
 @app.route('/delete/<int:place_id>')

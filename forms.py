@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, SubmitField, PasswordField
+from wtforms import StringField, SubmitField, PasswordField, SelectField
 from wtforms.validators import DataRequired, URL, Email
 from flask_ckeditor import CKEditorField
 
@@ -35,16 +35,16 @@ class CommentForm(FlaskForm):
 
 
 # WTForms
-class CafeForm(FlaskForm):
-    name = StringField('Cafe Name', validators=[DataRequired()])
-    location = StringField('Cafe Location on Google Map', validators=[DataRequired(), URL(message="Invalid URL")])
+class CreatePlaceForm(FlaskForm):
+    name = StringField('Place Name', validators=[DataRequired()])
+    location = StringField('Place Address')
+    location_url = StringField('Place Location on Google Map', validators=[DataRequired(), URL(message="Invalid URL")])
     open_time = StringField('Opening Time e.g. 8AM')
     close_time = StringField('Closing Time e.g. 4:30PM')
-    rating = StringField('Cafe Rating e.g. 9.5 out of 10')
-
-    submit = SubmitField('Submit')
-
-
-class RateCafeForm(FlaskForm):
-    rating = StringField("Cafe Rating e.g. 9.5 out of 10", validators=[DataRequired()])
+    rating = StringField('Place Rating e.g. 9.5 out of 10')
+    pricing = StringField('Pricing range e.g. 1000-2000 Ft')
+    category = SelectField('Category',
+                           choices=[('Restaurant', 'Restaurant'),
+                                    ('Cafe', 'Cafe'),
+                                    ('Sightseeing Spot', 'Sightseeing Spot')])
     submit = SubmitField('Submit')
