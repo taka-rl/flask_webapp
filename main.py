@@ -265,7 +265,7 @@ def edit_post(post_id):
 
 
 # Use a decorator so only an admin user can delete a post
-@app.route("/delete/<int:post_id>")
+@app.route("/delete-post/<int:post_id>")
 @admin_only
 def delete_post(post_id):
     post_to_delete = db.get_or_404(BlogPost, post_id)
@@ -298,7 +298,7 @@ def contact():
 def show_places():
     result = db.session.execute(db.select(Place))
     all_places = result.scalars().all()
-    return render_template('places.html', places=all_places)
+    return render_template('places.html', places=all_places, current_user=current_user)
 
 
 @app.route("/add-place", methods=["POST", "GET"])
@@ -349,20 +349,18 @@ def edit_place(place_id):
     return render_template('edit-place.html', place=place, form=edit_form)
 
 
-@app.route('/delete/<int:place_id>')
+@app.route('/delete-place/<int:place_id>')
+@admin_only
 def delete_place(place_id):
-    print("access")
-    cafe = db.get_or_404(Place, place_id)
     print(place_id)
-    if not cafe == 404:
-        db.session.delete(cafe)
-        db.session.commit()
-    else:
-        print("access fail")
-    return redirect(url_for('home'))
+    place_to_delete = db.get_or_404(Place, place_id)
+    db.session.delete(place_to_delete)
+    db.session.commit()
+    return redirect(url_for('show_places'))
 
 
 @app.route('/weather', methods=["POST", "GET"])
+@admin_only
 def show_weather():
     if request.method == "POST":
         location = request.form["loc"]
@@ -372,6 +370,7 @@ def show_weather():
 
 
 @app.route('/currency', methods=["POST"])
+@admin_only
 def get_currency():
     currency_data = get_currency_info()
     return currency_data
