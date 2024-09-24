@@ -16,11 +16,11 @@ This is a web app where I have been utilizing gained skills and knowledge in Fla
 - Add pages such as Blog posts, hobby, contact, about, register/login/logout
 - Show some posts/create a post
 - Add register/login/logout function
+- Design database considering Place, BlogPost, User and Comment
+- Add user authentication function for adding/editing/deleting places (only admin can)
 
 ## Future development:
 - Improve the web page design
-- Add user authentication function for adding cafes, restaurants
 - Make sure all the functionality
 - Introduce a chatbot
-- Design database considering Cafes, Restaurant, BlogPosts, Users
 - Deploy the web page
