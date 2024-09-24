@@ -9,7 +9,7 @@
     <div class="row gx-4 gx-lg-5 justify-content-center">
       <div class="col-md-10 col-lg-8 col-xl-7">
         <div class="page-heading">
-          <h1>All Cafes</h1>
+          <h1>All Places</h1>
           <span class="subheading"></span>
         </div>
       </div>
@@ -29,22 +29,26 @@
                 <td>Open Time</td>
                 <td>Close Time</td>
                 <td>Rating</td>
+                <td>Pricing</td>
+                <td>Category</td>
             </tr>
-          {% for cafe in cafes %}
+          {% for place in places %}
             <tr>
-                <td>{{ cafe.name }}</td>
-              	<td><a href="{{ cafe.location }}">Maps Link</a></td>
-                <td>{{ cafe.open_time }}</td>
-                <td>{{ cafe.close_time }}</td>
-                <td>{{ cafe.rating }}</td>
-                <td><a href="{{ url_for('edit_cafe', id=cafe.id) }}">Edit</a></td>
-                <td><a href="{{ url_for('delete_cafe', id=cafe.id) }}">Delete</a></td>
+                <td>{{ place.name }}</td>
+              	<td><a href="{{ place.location }}">Maps Link</a></td>
+                <td>{{ place.open_time }}</td>
+                <td>{{ place.close_time }}</td>
+                <td>{{ place.rating }}</td>
+                <td>{{ place.pricing }}</td>
+                <td>{{ place.category }}</td>
+                <td><a href="{{ url_for('edit_place', id=place.id) }}">Edit</a></td>
+                <td><a href="{{ url_for('delete_place', id=place.id) }}">Delete</a></td>
             </tr>
           {% endfor %}
   	  </table>
 
-      <p><a href="{{ url_for('show_cafes') }}">Return to index page</a></p>
-        <p><a href="{{ url_for('add_cafe') }}">Would you like to add a cafe?</a></p>
+      <p><a href="{{ url_for('hobby') }}">Return to Hobby page</a></p>
+        <p><a href="{{ url_for('add_place') }}">Would you like to add a new place?</a></p>
 
     </div>
   </div>

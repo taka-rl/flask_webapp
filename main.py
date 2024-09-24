@@ -293,14 +293,14 @@ def contact():
     return render_template("contact.html")
 
 
-@app.route('/cafes')
-def show_cafes():
-    all_cafes = []
-    return render_template('cafes.html', cafes=all_cafes)
+@app.route('/places')
+def show_places():
+    all_places = []
+    return render_template('places.html', places=all_places)
 
 
-@app.route("/add", methods=["POST", "GET"])
-def add_cafe():
+@app.route("/add-place", methods=["POST", "GET"])
+def add_place():
     form = CafeForm()
     if form.validate_on_submit():
         place = Place(name=form.name.data,
@@ -311,7 +311,7 @@ def add_cafe():
         db.session.add(place)
         db.session.commit()
         return redirect(url_for('home'))
-    return render_template("add.html", form=form)
+    return render_template("add-place.html", form=form)
 
 
 @app.route('/edit-place/<int:place_id>', methods=["POST", "GET"])
@@ -321,8 +321,8 @@ def edit_place(place_id):
     if form.validate_on_submit():
         cafe.rating = float(form.rating.data)
         db.session.commit()  # Commit the changes
-        return redirect(url_for('home'))
-    return render_template('edit.html', cafe=cafe, form=form)
+        return redirect(url_for('get_all_posts'))
+    return render_template('edit-place.html', cafe=cafe, form=form)
 
 
 @app.route('/delete/<int:place_id>')
