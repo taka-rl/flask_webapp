@@ -2,7 +2,6 @@ from datetime import date
 from flask import Flask, abort, render_template, redirect, url_for, flash, request
 from flask_bootstrap import Bootstrap5
 from flask_ckeditor import CKEditor
-# from flask_gravatar import Gravatar
 from flask_login import UserMixin, login_user, LoginManager, current_user, logout_user
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.orm import relationship, DeclarativeBase, Mapped, mapped_column
@@ -49,15 +48,17 @@ class User(UserMixin, db.Model):
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
     email: Mapped[str] = mapped_column(String(100), unique=True)
     password: Mapped[str] = mapped_column(String(100))
-    name: Mapped[str] = mapped_column(String(100))
+    name: Mapped[str] = mapped_column(String(20))
 
     # This will act like a List of BlogPost objects attached to each User.
     # The "author" refers to the author property in the BlogPost class.
-    posts = relationship("BlogPost", back_populates="author")
+    posts = relationship("BlogPost", back_populates="blog_author")
 
-    # *******Add parent relationship*******#
+    # ******* Parent relationship*******#
     # "comment_author" refers to the comment_author property in the Comment class.
     comments = relationship("Comment", back_populates="comment_author")
+
+    places = relationship("Place", back_populates="place_author")
 
 
 class BlogPost(db.Model):
@@ -67,15 +68,15 @@ class BlogPost(db.Model):
     # Create Foreign Key, "user.id" the users refers to the tablename of User.
     author_id: Mapped[int] = mapped_column(Integer, db.ForeignKey("users.id"))
     # Create reference to the User object. The "posts" refers to the posts property in the User class.
-    author = relationship("User", back_populates="posts")
+    blog_author = relationship("User", back_populates="posts")
 
-    title: Mapped[str] = mapped_column(String(250), unique=True, nullable=False)
+    title: Mapped[str] = mapped_column(String(100), unique=True, nullable=False)
     subtitle: Mapped[str] = mapped_column(String(250), nullable=False)
-    date: Mapped[str] = mapped_column(String(250), nullable=False)
+    date: Mapped[str] = mapped_column(String(10), nullable=False)
     body: Mapped[str] = mapped_column(Text, nullable=False)
     img_url: Mapped[str] = mapped_column(String(250), nullable=False)
 
-    # ***************Parent Relationship*************#
+    # *************** Parent Relationship *************#
     comments = relationship("Comment", back_populates="parent_post")
 
 
@@ -89,28 +90,26 @@ class Comment(db.Model):
     author_id: Mapped[int] = mapped_column(Integer, db.ForeignKey("users.id"))
     comment_author = relationship("User", back_populates="comments")
 
-    # ***************Child Relationship*************#
+    # *************** Child Relationship *************#
     post_id: Mapped[int] = mapped_column(Integer, db.ForeignKey("blog_posts.id"))
     parent_post = relationship("BlogPost", back_populates="comments")
     text: Mapped[str] = mapped_column(Text, nullable=False)
 
 
-class Restaurant(db.Model):
-    __tablename__ = "restaurants"
+class Place(db.Model):
+    __tablename__ = "places"
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
-    title: Mapped[str] = mapped_column(String(250), unique=True, nullable=False)
-    author: Mapped[str] = mapped_column(String(250), nullable=False)
-    rating: Mapped[float] = mapped_column(Float, nullable=False)
-
-
-class Cafe(db.Model):
-    __tablename__ = "cafes"
-    id: Mapped[int] = mapped_column(Integer, primary_key=True)
-    name: Mapped[str] = mapped_column(String(250), unique=True, nullable=False)
-    location: Mapped[str] = mapped_column(String(250), nullable=False)
-    open_time: Mapped[str] = mapped_column(String(250), nullable=True)
-    close_time: Mapped[str] = mapped_column(String(250), nullable=True)
+    name: Mapped[str] = mapped_column(String(30), unique=True, nullable=False)
+    location: Mapped[str] = mapped_column(String(50), nullable=False)
+    open_time: Mapped[str] = mapped_column(String(10), nullable=True)
+    close_time: Mapped[str] = mapped_column(String(10), nullable=True)
     rating: Mapped[float] = mapped_column(Float, nullable=True)
+    category: Mapped[str] = mapped_column(String(15), nullable=True)
+    location_url: Mapped[str] = mapped_column(String(250), nullable=True)
+
+    # ***************Child Relationship*************#
+    author_id: Mapped[int] = mapped_column(Integer, db.ForeignKey("users.id"))
+    place_author = relationship("User", back_populates="places")
 
 
 with app.app_context():
@@ -304,21 +303,21 @@ def show_cafes():
 def add_cafe():
     form = CafeForm()
     if form.validate_on_submit():
-        cafe = Cafe(name=form.name.data,
-                    location=form.location.data,
-                    open_time=form.open_time.data,
-                    close_time=form.close_time.data,
-                    rating=form.rating.data)
-        db.session.add(cafe)
+        place = Place(name=form.name.data,
+                      location=form.location.data,
+                      open_time=form.open_time.data,
+                      close_time=form.close_time.data,
+                      rating=form.rating.data)
+        db.session.add(place)
         db.session.commit()
         return redirect(url_for('home'))
     return render_template("add.html", form=form)
 
 
-@app.route('/edit/<int:cafe_id>', methods=["POST", "GET"])
-def edit_cafe(cafe_id):
+@app.route('/edit-place/<int:place_id>', methods=["POST", "GET"])
+def edit_place(place_id):
     form = RateCafeForm()
-    cafe = db.get_or_404(Cafe, cafe_id)  # to check if the movie_id exists among Movie database.
+    cafe = db.get_or_404(Place, place_id)  # to check if the movie_id exists among Movie database.
     if form.validate_on_submit():
         cafe.rating = float(form.rating.data)
         db.session.commit()  # Commit the changes
@@ -326,11 +325,11 @@ def edit_cafe(cafe_id):
     return render_template('edit.html', cafe=cafe, form=form)
 
 
-@app.route('/delete/<int:cafe_id>')
-def delete_cafe(cafe_id):
+@app.route('/delete/<int:place_id>')
+def delete_place(place_id):
     print("access")
-    cafe = db.get_or_404(Cafe, cafe_id)
-    print(cafe_id)
+    cafe = db.get_or_404(Place, place_id)
+    print(place_id)
     if not cafe == 404:
         db.session.delete(cafe)
         db.session.commit()
