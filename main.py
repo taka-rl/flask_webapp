@@ -12,6 +12,7 @@ from forms import CreatePostForm, RegisterForm, LoginForm, CommentForm, CreatePl
 from weather import get_weather_info
 from currency import get_currency_info
 from dotenv import load_dotenv
+import smtplib
 import os
 
 # Load environment variables from .env file
@@ -284,16 +285,6 @@ def hobby():
     return render_template("hobby.html")
 
 
-@app.route("/useful_info")
-def useful_info():
-    return render_template("useful_info.html")
-
-
-@app.route("/contact")
-def contact():
-    return render_template("contact.html")
-
-
 @app.route('/places')
 def show_places():
     result = db.session.execute(db.select(Place))
@@ -346,17 +337,55 @@ def edit_place(place_id):
 
         db.session.commit()  # Commit the changes
         return redirect(url_for('show_places'))
-    return render_template('edit-place.html', place=place, form=edit_form)
+    return render_template('add-place.html', place=place, form=edit_form, is_edit=True)
 
 
 @app.route('/delete-place/<int:place_id>')
 @admin_only
 def delete_place(place_id):
-    print(place_id)
     place_to_delete = db.get_or_404(Place, place_id)
     db.session.delete(place_to_delete)
     db.session.commit()
     return redirect(url_for('show_places'))
+
+
+@app.route("/contact")
+def contact():
+    return render_template("contact.html")
+
+
+@app.route("/contact", methods=["POST", "GET"])
+def receive_data():
+    if request.method == "POST":
+        topic = request.form["topic"]
+        name = request.form["name"]
+        to_email = request.form["email"]
+        phone = request.form["phone"]
+        message = request.form["message"]
+
+        send_email(to_email, message)
+
+        return render_template('contact.html', msg_sent=True)
+    else:
+        return render_template('contact.html')
+
+
+def send_email(to_email, message):
+    from_email = os.getenv('MYEMAIL')
+    password = os.getenv('EMAIL_PASSWORD')
+
+    with smtplib.SMTP("smtp.gmail.com", timeout=60, port=587) as connection:
+        connection.starttls()
+        connection.login(user=from_email, password=password)
+        connection.sendmail(
+            from_addr=from_email,
+            to_addrs=to_email,
+            msg=message)
+
+
+@app.route("/useful_info")
+def useful_info():
+    return render_template("useful_info.html")
 
 
 @app.route('/weather', methods=["POST", "GET"])

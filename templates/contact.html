@@ -38,6 +38,14 @@
             action="{{ url_for('contact') }}"
             method="post"
           >
+            <label for="topic">Choose a topic:</label>
+            <select name="topic" id="topic">
+              <option value="Job">Job</option>
+              <option value="YouTube">YouTube</option>
+              <option value="Others">Others</option>
+            </select>
+            <br>
+
             <div class="form-floating">
               <input
                 class="form-control"
@@ -84,11 +92,11 @@
             </div>
             <br />
             <button
-              class="btn btn-danger text-uppercase"
+              class="btn btn-primary text-uppercase"
               id="submitButton"
               type="submit"
             >
-              NOT USED in Day 69
+              Send
             </button>
           </form>
         </div>
