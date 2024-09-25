@@ -49,6 +49,7 @@ The ERD is as follows:
 - Add register/login/logout function
 - Design database considering Place, BlogPost, User and Comment
 - Add user authentication function for adding/editing/deleting places (only admin can)
+- Add an send_email function in the contact.html
 
 ## Future development:
 - Improve the web page design

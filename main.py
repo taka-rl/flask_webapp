@@ -13,6 +13,8 @@ from weather import get_weather_info
 from currency import get_currency_info
 from dotenv import load_dotenv
 import smtplib
+from email.mime.text import MIMEText
+from email.mime.multipart import MIMEMultipart
 import os
 
 # Load environment variables from .env file
@@ -357,30 +359,68 @@ def contact():
 @app.route("/contact", methods=["POST", "GET"])
 def receive_data():
     if request.method == "POST":
-        topic = request.form["topic"]
+        subject = request.form["subject"]
         name = request.form["name"]
         to_email = request.form["email"]
         phone = request.form["phone"]
         message = request.form["message"]
 
-        send_email(to_email, message)
+        # automatically send to the questioner
+        send_email(to_email=to_email, name=name, subject=subject, message=message)
 
         return render_template('contact.html', msg_sent=True)
     else:
         return render_template('contact.html')
 
 
-def send_email(to_email, message):
+def send_email(to_email, name, subject, message):
     from_email = os.getenv('MYEMAIL')
     password = os.getenv('EMAIL_PASSWORD')
+
+    cc_email = None
+    bcc_email = None
+
+    # Create the email headers
+    msg = MIMEMultipart()
+    msg['From'] = from_email
+    msg['To'] = to_email
+    msg['Subject'] = 'Thank you for your message!'
+
+    if cc_email:
+        msg['Cc'] = cc_email
+
+    # Create header and footer messages
+    header_message = (f'Dear {name},\n\n'
+                      f'Thank you for your message!\n'
+                      f'I will check your message and get back to you quickly!\n\n'
+                      f'-------- Messages that you sent are as follows: --------\n'
+                      f'Subject: {subject}')
+
+    footer_message = (f'\nBest regards, \n'
+                      f'Your Name\n'
+                      f'{from_email}\n')
+
+    # Combine messages
+    message = header_message + message + footer_message
+
+    # Attach the message body
+    msg.attach(MIMEText(message, 'plain'))
+
+    # Collect all recipients (to, cc, and bcc)
+    recipients = [to_email]
+    if cc_email:
+        recipients += [cc_email]
+    if bcc_email:
+        recipients += [bcc_email]
 
     with smtplib.SMTP("smtp.gmail.com", timeout=60, port=587) as connection:
         connection.starttls()
         connection.login(user=from_email, password=password)
         connection.sendmail(
             from_addr=from_email,
-            to_addrs=to_email,
-            msg=message)
+            to_addrs=recipients,
+            msg=msg.as_string()
+        )
 
 
 @app.route("/useful_info")

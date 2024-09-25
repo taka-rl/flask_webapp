@@ -38,14 +38,6 @@
             action="{{ url_for('contact') }}"
             method="post"
           >
-            <label for="topic">Choose a topic:</label>
-            <select name="topic" id="topic">
-              <option value="Job">Job</option>
-              <option value="YouTube">YouTube</option>
-              <option value="Others">Others</option>
-            </select>
-            <br>
-
             <div class="form-floating">
               <input
                 class="form-control"
@@ -75,9 +67,19 @@
                 name="phone"
                 type="tel"
                 placeholder="Enter your phone number..."
-                required
               />
               <label for="phone">Phone Number</label>
+            </div>
+            <div class="form-floating">
+              <input
+                class="form-control"
+                id="subject"
+                name="subject"
+                type="text"
+                placeholder="Enter your subject..."
+                required
+              />
+              <label for="subject">Subject</label>
             </div>
             <div class="form-floating">
               <textarea
