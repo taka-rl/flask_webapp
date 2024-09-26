@@ -366,14 +366,14 @@ def receive_data():
         message = request.form["message"]
 
         # automatically send to the questioner
-        send_email(to_email=to_email, name=name, subject=subject, message=message)
+        send_email(to_email=to_email, name=name, phone=phone, subject=subject, message=message)
 
         return render_template('contact.html', msg_sent=True)
     else:
         return render_template('contact.html')
 
 
-def send_email(to_email, name, subject, message):
+def send_email(to_email, name, phone, subject, message):
     from_email = os.getenv('MYEMAIL')
     password = os.getenv('EMAIL_PASSWORD')
 
@@ -394,6 +394,8 @@ def send_email(to_email, name, subject, message):
                       f'Thank you for your message!\n'
                       f'I will check your message and get back to you quickly!\n\n'
                       f'-------- Messages that you sent are as follows: --------\n'
+                      f'Name: {name}\n'
+                      f'Phone: {phone}\n'
                       f'Subject: {subject}')
 
     footer_message = (f'\nBest regards, \n'
@@ -438,7 +440,7 @@ def show_weather():
     return render_template('weather.html', loc=location, weather_data=weather_data)
 
 
-@app.route('/currency', methods=["POST"])
+@app.route('/currency', methods=["POfST"])
 @admin_only
 def get_currency():
     currency_data = get_currency_info()
@@ -446,4 +448,4 @@ def get_currency():
 
 
 if __name__ == "__main__":
-    app.run(debug=True, port=5002)
+    app.run(debug=True)
