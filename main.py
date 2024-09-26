@@ -20,6 +20,8 @@ import os
 # Load environment variables from .env file
 load_dotenv()
 
+ADMIN_NAME = os.getenv('ADMIN_NAME')
+
 app = Flask(__name__)
 app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
 ckeditor = CKEditor(app)
@@ -396,10 +398,12 @@ def send_email(to_email, name, phone, subject, message):
                       f'-------- Messages that you sent are as follows: --------\n'
                       f'Name: {name}\n'
                       f'Phone: {phone}\n'
-                      f'Subject: {subject}')
+                      f'Subject: {subject}\n'
+                      f'Message: \n')
 
-    footer_message = (f'\nBest regards, \n'
-                      f'Your Name\n'
+    footer_message = (f'\n--------------------------------------------------------\n\n'
+                      f'Best regards,\n'
+                      f'{ADMIN_NAME}\n'
                       f'{from_email}\n')
 
     # Combine messages
