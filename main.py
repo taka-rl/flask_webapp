@@ -40,7 +40,7 @@ class Base(DeclarativeBase):
     pass
 
 
-app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('SQLALCHEMY_DATABASE_URI')
+app.config['DATABASE_URL'] = os.getenv('DATABASE_URL')
 db = SQLAlchemy(model_class=Base)
 db.init_app(app)
 
@@ -123,7 +123,7 @@ with app.app_context():
 def admin_only(f):
     @wraps(f)
     def decorated_function(*args, **kwargs):
-        # If id is not 1 then return abort with 403 error
+        # OnlyIf id is not 1 then return abort with 403 error
         if current_user.id != 1:
             return abort(code=403)
         # Otherwise continue with the route function
