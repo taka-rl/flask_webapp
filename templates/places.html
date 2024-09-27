@@ -39,7 +39,7 @@
           {% for place in places %}
             <tr>
                 <td>{{ place.name }}</td>
-              	<td><a href="{{ place.location }}">Maps Link</a></td>
+              	<td><a href="{{ place.location_url }}" target="blank">{{ place.location }}</a></td>
                 <td>{{ place.open_time }}</td>
                 <td>{{ place.close_time }}</td>
                 <td>{{ place.rating }}</td>
