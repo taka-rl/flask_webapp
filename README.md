@@ -1,12 +1,13 @@
 # About
-This is a web app where I have been utilizing gained skills and knowledge in Flask, Database, RESTful API and Python while learning them by myself.
+This is a Flask web app example where I have been utilizing gained skills and knowledge in Flask, sqlalchemy, RESTful API and Python while learning them by myself.
 
 ## Stacked tech
 - Python
 - Flask
 - HTML/CSS/Bootstrap
 - Flask-WTF/WTForm
-- SQLite
+- sqlalchemy
+- PosgreSQL (for deploy)
 - Flask-Login
 
 ## Preparation to use
@@ -21,17 +22,27 @@ This is a web app where I have been utilizing gained skills and knowledge in Fla
    OpenWeather API: https://openweathermap.org/api  
    ExchangeRate API: https://www.exchangerate-api.com/
 
-3. Get an App password if you would like to use Email sender function in contact.html  
-   
+3. Get an App password on Google if you would like to use email sender function in contact.html  
+   How to create App password → https://knowledge.workspace.google.com/kb/how-to-create-app-passwords-000009237?hl=ja
+
 4. Create .env file including the following variables:
    ```
-   SQLALCHEMY_DATABASE_URI=sqlite:///XXXXX.db  # Database
+   SQLALCHEMY_DATABASE_URI=sqlite:///posts.db  # Database
    SECRET_KEY=Type Your Secret Key  # Flask Secret Key
    WEATHER_API_KEY = 'Replace Your API Key set at 2'  # OpenWeather API
    ExchangeRate_API_KEY = 'Replace Your API Key set at 2'  # ExchangeRate API
    MYEMAIL = 'Your Email Address set at 3'
    EMAIL_PASSWORD = 'App Password set at 3'
    ```
+5. Run main.py
+6. Use one of the accounts written as below to Login
+- admin user:  
+   email: admin@email.com  
+   password: admin  
+- non admin user:     
+   email:test@email.com  
+   password: test@email.com  
+Note: You can register a new account but admin user is the admin as the id of User is 1 .
 
 
 ## Design
@@ -49,10 +60,11 @@ The ERD is as follows:
 - Add register/login/logout function
 - Design database considering Place, BlogPost, User and Comment
 - Add user authentication function for adding/editing/deleting places (only admin can)
-- Add an send_email function in the contact.html
+- Add a send_email function in the contact.html
 
 ## Future development:
 - Improve the web page design
 - Make sure all the functionality
+- Add functions to add/delete users by admin
 - Introduce a chatbot
 - Deploy the web page
