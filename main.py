@@ -284,9 +284,9 @@ def about():
     return render_template("about.html")
 
 
-@app.route("/hobby")
-def hobby():
-    return render_template("hobby.html")
+@app.route("/collection")
+def collection():
+    return render_template("collection.html")
 
 
 @app.route('/places')

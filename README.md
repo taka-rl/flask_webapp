@@ -9,6 +9,7 @@ This is a Flask web app example where I have been utilizing gained skills and kn
 - sqlalchemy
 - PosgreSQL (for deploy)
 - Flask-Login
+- Jinja
 
 ## Preparation to use
 1. Run the following command for the libraries:
@@ -64,6 +65,7 @@ The ERD is as follows:
 
 ## Future development:
 - Improve the web page design
+- Add a language switcher
 - Make sure all the functionality
 - Add functions to add/delete users by admin
 - Introduce a chatbot

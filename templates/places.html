@@ -54,7 +54,7 @@
           {% endfor %}
   	  </table>
 
-      <p><a href="{{ url_for('hobby') }}">Return to Hobby page</a></p>
+      <p><a href="{{ url_for('collection') }}">Return to Hobby page</a></p>
         {% if current_user.id == 1: %}
         <p><a href="{{ url_for('add_place') }}">Would you like to add a new place?</a></p>
         {% endif %}
