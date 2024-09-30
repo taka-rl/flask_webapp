@@ -1,0 +1,32 @@
+{
+  "index": {
+    "title": "TakaTaka Blog",
+    "subtitle": "Welcome to my blog",
+    "posted_by": "投稿者",
+    "on": "日付",
+    "older_posts": "古い投稿 →",
+    "create_posts": "新しい投稿"
+  },
+  "menu": {
+    "home": "ホーム",
+    "about": "概要",
+    "collection": "コレクション",
+    "contact": "お問い合わせ",
+    "login": "ログイン",
+    "logout": "ログアウト",
+    "useful_info": "お役立ち情報",
+    "register": "登録"
+  },
+  "contact": {
+    "title": "お問い合わせ",
+    "subtitle": "ご質問にお答えします",
+    "form_msg": "下記のお問い合わせフォームをご入力ください",
+    "name": "名前",
+    "email": "Eメールアドレス",
+    "phone": "電話番号",
+    "subject": "件名",
+    "message": "本文",
+    "send": "送信",
+    "success": "送信完了"
+  }
+}

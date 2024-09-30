@@ -62,10 +62,11 @@ The ERD is as follows:
 - Design database considering Place, BlogPost, User and Comment
 - Add user authentication function for adding/editing/deleting places (only admin can)
 - Add a send_email function in the contact.html
+- Add a language switcher
 
 ## Future development:
 - Improve the web page design
-- Add a language switcher
+- Organize main.py
 - Make sure all the functionality
 - Add functions to add/delete users by admin
 - Introduce a chatbot

@@ -1,0 +1,32 @@
+{
+  "index": {
+    "title": "TakaTaka Blog",
+    "subtitle": "Welcome to my blog",
+    "posted_by": "Posted by",
+    "on": "on",
+    "older_posts": "Older Posts →",
+    "create_posts": "Create a new post"
+  },
+  "menu": {
+    "home": "Home",
+    "about": "About",
+    "collection": "Collection",
+    "contact": "Contact",
+    "login": "Login",
+    "logout": "Log Out",
+    "useful_info": "Useful_info",
+    "register": "register"
+  },
+  "contact": {
+    "title": "contact",
+    "subtitle": "Have qustions? I have answers!",
+    "form_msg": "Want to get in touch? Fill out the form below to send me a message and\nI will get back to you as soon as possible!",
+    "name": "name",
+    "email": "Email address",
+    "phone": "Phone Number",
+    "subject": "Subject",
+    "message": "Message",
+    "send": "Send",
+    "success": "Successfully sent your message"
+  }
+}

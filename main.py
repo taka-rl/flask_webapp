@@ -1,5 +1,5 @@
 from datetime import date
-from flask import Flask, abort, render_template, redirect, url_for, flash, request
+from flask import Flask, abort, render_template, redirect, url_for, flash, request, session, make_response, g
 from flask_bootstrap import Bootstrap5
 from flask_ckeditor import CKEditor
 from flask_login import UserMixin, login_user, LoginManager, current_user, logout_user
@@ -16,6 +16,7 @@ import smtplib
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 import os
+import json
 
 # Load environment variables from .env file
 load_dotenv()
@@ -122,6 +123,33 @@ with app.app_context():
     db.create_all()
 
 
+def load_translations(lang):
+    try:
+        with open(f'static/translations/{lang}.json', encoding='utf-8') as f:
+            return json.load(f)
+    except FileNotFoundError:
+        # default to English if the file is not found
+        with open(f'static/translations/en.json', encoding='utf-8') as f:
+            return json.load(f)
+
+
+def with_translations(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        lang = session.get('lang', 'en')
+        g.translations = load_translations(lang)
+        return f(*args, **kwargs)
+    return decorated_function
+
+
+@app.route('/switch_language/<lang>')
+def switch_language(lang):
+    session['lang'] = lang  # Store in session
+    response = make_response(redirect(request.referrer))
+    response.set_cookie('lang', lang, max_age=30*24*60*60)  # Store in cookie (30 days)
+    return response
+
+
 def admin_only(f):
     @wraps(f)
     def decorated_function(*args, **kwargs):
@@ -135,6 +163,7 @@ def admin_only(f):
 
 # Use Werkzeug to hash the user's password when creating a new user.
 @app.route('/register', methods=["POST", "GET"])
+@with_translations
 def register():
     form = RegisterForm()
     if form.validate_on_submit():
@@ -167,6 +196,7 @@ def register():
 
 # Retrieve a user from the database based on their email.
 @app.route('/login', methods=["POST", "GET"])
+@with_translations
 def login():
     form = LoginForm()
     if form.validate_on_submit():
@@ -197,14 +227,18 @@ def logout():
 
 
 @app.route('/')
+@with_translations
 def get_all_posts():
     result = db.session.execute(db.select(BlogPost))
     posts = result.scalars().all()
-    return render_template("index.html", all_posts=posts, current_user=current_user)
+
+    return render_template("index.html",
+                           all_posts=posts, current_user=current_user)
 
 
 # Allow logged-in users to comment on posts
 @app.route("/post/<int:post_id>", methods=["GET", "POST"])
+@with_translations
 def show_post(post_id):
     requested_post = db.get_or_404(BlogPost, post_id)
     comment_form = CommentForm()
@@ -229,6 +263,7 @@ def show_post(post_id):
 # Use a decorator so only an admin user can create a new post
 @app.route("/new-post", methods=["GET", "POST"])
 @admin_only
+@with_translations
 def add_new_post():
     form = CreatePostForm()
     if form.validate_on_submit():
@@ -280,16 +315,19 @@ def delete_post(post_id):
 
 
 @app.route("/about")
+@with_translations
 def about():
     return render_template("about.html")
 
 
 @app.route("/collection")
+@with_translations
 def collection():
     return render_template("collection.html")
 
 
 @app.route('/places')
+@with_translations
 def show_places():
     result = db.session.execute(db.select(Place))
     all_places = result.scalars().all()
@@ -297,6 +335,7 @@ def show_places():
 
 
 @app.route("/add-place", methods=["POST", "GET"])
+@with_translations
 def add_place():
     form = CreatePlaceForm()
     if form.validate_on_submit():
@@ -354,6 +393,7 @@ def delete_place(place_id):
 
 
 @app.route("/contact")
+@with_translations
 def contact():
     return render_template("contact.html")
 
@@ -430,6 +470,7 @@ def send_email(to_email, name, phone, subject, message):
 
 
 @app.route("/useful_info")
+@with_translations
 def useful_info():
     return render_template("useful_info.html")
 
@@ -452,4 +493,4 @@ def get_currency():
 
 
 if __name__ == "__main__":
-    app.run(debug=False)
+    app.run(debug=True)

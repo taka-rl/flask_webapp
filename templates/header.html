@@ -72,14 +72,14 @@
               <a
                 class="nav-link px-lg-3 py-3 py-lg-4"
                 href="{{ url_for('login') }}"
-                >Login</a
+                >{{ g.translations['menu']['login'] }}</a
               >
             </li>
             <li class="nav-item">
               <a
                 class="nav-link px-lg-3 py-3 py-lg-4"
                 href="{{ url_for('register') }}"
-                >Register</a
+                >{{ g.translations['menu']['register'] }}</a
               >
             </li>
             {% else %}
@@ -87,7 +87,7 @@
               <a
                 class="nav-link px-lg-3 py-3 py-lg-4"
                 href="{{ url_for('logout') }}"
-                >Log Out</a
+                >{{ g.translations['menu']['logout'] }}</a
               >
             </li>
             {% endif %}
@@ -95,14 +95,14 @@
               <a
                 class="nav-link px-lg-3 py-3 py-lg-4"
                 href="{{ url_for('about') }}"
-                >About</a
+                >{{ g.translations['menu']['about'] }}</a
               >
             </li>
             <li class="nav-item">
               <a
                 class="nav-link px-lg-3 py-3 py-lg-4"
                 href="{{ url_for('collection') }}"
-                >Collection</a
+                >{{ g.translations['menu']['collection'] }}</a
               >
             </li>
             {% if current_user.id == 1: %}
@@ -110,7 +110,7 @@
               <a
                 class="nav-link px-lg-3 py-3 py-lg-4"
                 href="{{ url_for('useful_info') }}"
-                >Useful Info</a
+                >{{ g.translations['menu']['useful_info'] }}</a
               >
             </li>
             {% endif %}
@@ -118,9 +118,17 @@
               <a
                 class="nav-link px-lg-3 py-3 py-lg-4"
                 href="{{ url_for('contact') }}"
-                >Contact</a
+                >{{ g.translations['menu']['contact'] }}</a
               >
             </li>
+              <ul class="navbar-nav ms-auto py-4 py-lg-0">
+                <li class="nav-item">
+                  <a class="nav-link" href="{{ url_for('switch_language', lang='en') }}">English</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="{{ url_for('switch_language', lang='jp') }}">日本語</a>
+                </li>
+              </ul>
           </ul>
         </div>
       </div>
