@@ -53,7 +53,7 @@ The ERD is as follows:
 ![image](https://github.com/user-attachments/assets/68e1780e-5b8a-4942-bcf1-afad40384a81)
 
 
-## Current development:  
+## Finished development:  
 - Store my favorite cafes in the database(SQLAlchemy)
 - Show you the weather information through OpenWeather API
 - Get the currency exchange rate between JPY and HUF through ExchangeRate API
@@ -65,9 +65,11 @@ The ERD is as follows:
 - Add a send_email function in the contact.html
 - Add a language switcher
 
+## Current development
+- Organize main.py (See Directory structure)
+
 ## Future development:
 - Improve the web page design
-- Organize main.py (See Directory structure)
 - Error handling
 - CI/CD pipelines
 - Make sure all the functionality/Unit testing/API testing
