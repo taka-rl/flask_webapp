@@ -96,7 +96,7 @@ The ERD is as follows:
     └── README.md
 
 ### Updated structure
-├── instance                # database file
+    ├── instance                # database file
     ├── static                  # static files
     │   ├── assets              # img files
     │   ├── css                 # css file related to bootstrap
