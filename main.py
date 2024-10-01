@@ -15,19 +15,27 @@ from dotenv import load_dotenv
 # Load environment variables from .env file
 load_dotenv()
 
-app = Flask(__name__)
-app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
-ckeditor = CKEditor(app)
-Bootstrap5(app)
-
-# Configure Flask-Login
+# Initialize extensions
+db = SQLAlchemy()
 login_manager = LoginManager()
-login_manager.init_app(app)
+ckeditor = CKEditor()
+bootstrap = Bootstrap5()
 
 
-app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('SQLALCHEMY_DATABASE_URI')
-db = SQLAlchemy(model_class=Base)
-db.init_app(app)
+def create_app():
+    app = Flask(__name__)
+    app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
+    app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('SQLALCHEMY_DATABASE_URI')
+
+    # Initialize app with extentions
+    db.init_app(app)
+    login_manager.init_app(app)
+    ckeditor.init_app(app)
+    bootstrap.init_app(app)
+    return app
+
+
+app = create_app()
 
 
 @login_manager.user_loader
