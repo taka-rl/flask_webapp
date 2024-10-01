@@ -11,6 +11,7 @@ This is a Flask web app example where I have been utilizing gained skills and kn
 - Flask-Login
 - Jinja
 
+
 ## Preparation to use
 1. Run the following command for the libraries:
    
@@ -66,8 +67,57 @@ The ERD is as follows:
 
 ## Future development:
 - Improve the web page design
-- Organize main.py
-- Make sure all the functionality
+- Organize main.py (See Directory structure)
+- Error handling
+- CI/CD pipelines
+- Make sure all the functionality/Unit testing/API testing
 - Add functions to add/delete users by admin
 - Introduce a chatbot
 - Deploy the web page
+
+
+## Directory structure
+### Current structure
+    ├── instance                # database file
+    ├── static                  # static files
+    │   ├── assets              # img files
+    │   ├── css                 # css file related to bootstrap
+    │   ├── js                  # js file related to bootstrap
+    │   └── translations        # language json files
+    ├── templates               # route html files
+    ├── main.py                 # main flask app file
+    ├── form.py                 # main flask app file
+    ├── currency.py             # forms
+    ├── weather.py              # weather API
+    ├── weather.py              # currency API
+    ├── .gitignore
+    ├── Procfile                 
+    ├── requirements.txt
+    └── README.md
+
+### Updated structure
+├── instance                # database file
+    ├── static                  # static files
+    │   ├── assets              # img files
+    │   ├── css                 # css file related to bootstrap
+    │   ├── js                  # js file related to bootstrap
+    │   └── translations        # language json files
+    ├── templates               # route html files
+    ├── flask_app               
+    │   ├── __init__.py         # Initialize Flask app and extensions
+    │   ├── forms.py            # Forms
+    │   ├── models.py           # Database models
+    │   ├── utils.py            # Utility functions such as decorators, email sender
+    │   └── route               
+    │       ├── about.py        # About-related routes
+    │       ├── auth.py         # Auth-related routes
+    │       ├── blog.py         # Blog-related routes
+    │       ├── collection.py   # Collection-related routes
+    │       ├── contact.py      # Contact-related routes
+    │       ├── others.py       # Other (language switcher)
+    │       └── useful_info.py  # Useful_info-related routes
+    ├── main.py                 # Run the app
+    ├── .gitignore
+    ├── Procfile                 
+    ├── requirements.txt
+    └── README.md

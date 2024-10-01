@@ -1,27 +1,20 @@
 from datetime import date
-from flask import Flask, abort, render_template, redirect, url_for, flash, request, session, make_response, g
+from flask import Flask, render_template, redirect, url_for, flash, request, session, make_response
 from flask_bootstrap import Bootstrap5
 from flask_ckeditor import CKEditor
 from flask_login import UserMixin, login_user, LoginManager, current_user, logout_user
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.orm import relationship, DeclarativeBase, Mapped, mapped_column
 from sqlalchemy import Integer, String, Text, Float
-from functools import wraps
 from werkzeug.security import generate_password_hash, check_password_hash
 from forms import CreatePostForm, RegisterForm, LoginForm, CommentForm, CreatePlaceForm
-from weather import get_weather_info
-from currency import get_currency_info
 from dotenv import load_dotenv
-import smtplib
-from email.mime.text import MIMEText
-from email.mime.multipart import MIMEMultipart
+from utils import with_translations, admin_only, send_email, get_weather_info, get_currency_info
 import os
-import json
+
 
 # Load environment variables from .env file
 load_dotenv()
-
-ADMIN_NAME = os.getenv('ADMIN_NAME')
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
@@ -123,42 +116,12 @@ with app.app_context():
     db.create_all()
 
 
-def load_translations(lang):
-    try:
-        with open(f'static/translations/{lang}.json', encoding='utf-8') as f:
-            return json.load(f)
-    except FileNotFoundError:
-        # default to English if the file is not found
-        with open(f'static/translations/en.json', encoding='utf-8') as f:
-            return json.load(f)
-
-
-def with_translations(f):
-    @wraps(f)
-    def decorated_function(*args, **kwargs):
-        lang = session.get('lang', 'en')
-        g.translations = load_translations(lang)
-        return f(*args, **kwargs)
-    return decorated_function
-
-
 @app.route('/switch_language/<lang>')
 def switch_language(lang):
     session['lang'] = lang  # Store in session
     response = make_response(redirect(request.referrer))
     response.set_cookie('lang', lang, max_age=30*24*60*60)  # Store in cookie (30 days)
     return response
-
-
-def admin_only(f):
-    @wraps(f)
-    def decorated_function(*args, **kwargs):
-        # OnlyIf id is not 1 then return abort with 403 error
-        if current_user.id != 1:
-            return abort(code=403)
-        # Otherwise continue with the route function
-        return f(*args, **kwargs)
-    return decorated_function
 
 
 # Use Werkzeug to hash the user's password when creating a new user.
@@ -355,6 +318,7 @@ def add_place():
 
 
 @app.route('/edit-place/<int:place_id>', methods=["POST", "GET"])
+@with_translations
 def edit_place(place_id):
     place = db.get_or_404(Place, place_id)
 
@@ -415,60 +379,6 @@ def receive_data():
         return render_template('contact.html')
 
 
-def send_email(to_email, name, phone, subject, message):
-    from_email = os.getenv('MYEMAIL')
-    password = os.getenv('EMAIL_PASSWORD')
-
-    cc_email = None
-    bcc_email = None
-
-    # Create the email headers
-    msg = MIMEMultipart()
-    msg['From'] = from_email
-    msg['To'] = to_email
-    msg['Subject'] = 'Thank you for your message!'
-
-    if cc_email:
-        msg['Cc'] = cc_email
-
-    # Create header and footer messages
-    header_message = (f'Dear {name},\n\n'
-                      f'Thank you for your message!\n'
-                      f'I will check your message and get back to you quickly!\n\n'
-                      f'-------- Messages that you sent are as follows: --------\n'
-                      f'Name: {name}\n'
-                      f'Phone: {phone}\n'
-                      f'Subject: {subject}\n'
-                      f'Message: \n')
-
-    footer_message = (f'\n--------------------------------------------------------\n\n'
-                      f'Best regards,\n'
-                      f'{ADMIN_NAME}\n'
-                      f'{from_email}\n')
-
-    # Combine messages
-    message = header_message + message + footer_message
-
-    # Attach the message body
-    msg.attach(MIMEText(message, 'plain'))
-
-    # Collect all recipients (to, cc, and bcc)
-    recipients = [to_email]
-    if cc_email:
-        recipients += [cc_email]
-    if bcc_email:
-        recipients += [bcc_email]
-
-    with smtplib.SMTP("smtp.gmail.com", timeout=60, port=587) as connection:
-        connection.starttls()
-        connection.login(user=from_email, password=password)
-        connection.sendmail(
-            from_addr=from_email,
-            to_addrs=recipients,
-            msg=msg.as_string()
-        )
-
-
 @app.route("/useful_info")
 @with_translations
 def useful_info():
@@ -477,6 +387,7 @@ def useful_info():
 
 @app.route('/weather', methods=["POST", "GET"])
 @admin_only
+@with_translations
 def show_weather():
     if request.method == "POST":
         location = request.form["loc"]
@@ -485,8 +396,9 @@ def show_weather():
     return render_template('weather.html', loc=location, weather_data=weather_data)
 
 
-@app.route('/currency', methods=["POfST"])
+@app.route('/currency', methods=["POST"])
 @admin_only
+@with_translations
 def get_currency():
     currency_data = get_currency_info()
     return currency_data
