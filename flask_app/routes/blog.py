@@ -59,7 +59,7 @@ def add_new_post():
         )
         db.session.add(new_post)
         db.session.commit()
-        return redirect(url_for("get_all_posts"))
+        return redirect(url_for("blog.get_all_posts"))
     return render_template("make-post.html", form=form)
 
 
@@ -83,7 +83,7 @@ def edit_post(post_id):
         post.author = current_user
         post.body = edit_form.body.data
         db.session.commit()
-        return redirect(url_for("show_post", post_id=post.id))
+        return redirect(url_for("blog.show_post", post_id=post.id))
     return render_template("make-post.html", form=edit_form, is_edit=True)
 
 
@@ -94,4 +94,4 @@ def delete_post(post_id):
     post_to_delete = db.get_or_404(BlogPost, post_id)
     db.session.delete(post_to_delete)
     db.session.commit()
-    return redirect(url_for('get_all_posts'))
+    return redirect(url_for('blog.get_all_posts'))

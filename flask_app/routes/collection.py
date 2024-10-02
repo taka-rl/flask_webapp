@@ -38,7 +38,7 @@ def add_place():
                       place_author=current_user)
         db.session.add(place)
         db.session.commit()
-        return redirect(url_for('show_places'))
+        return redirect(url_for('collection.show_places'))
     return render_template("add-place.html", form=form)
 
 
@@ -68,7 +68,7 @@ def edit_place(place_id):
         place.category = edit_form.category.data
 
         db.session.commit()  # Commit the changes
-        return redirect(url_for('show_places'))
+        return redirect(url_for('collection.show_places'))
     return render_template('add-place.html', place=place, form=edit_form, is_edit=True)
 
 
@@ -78,4 +78,4 @@ def delete_place(place_id):
     place_to_delete = db.get_or_404(Place, place_id)
     db.session.delete(place_to_delete)
     db.session.commit()
-    return redirect(url_for('show_places'))
+    return redirect(url_for('collection.show_places'))

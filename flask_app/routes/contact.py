@@ -11,6 +11,7 @@ def contact():
 
 
 @contact_bp.route("/contact", methods=["POST", "GET"])
+@with_translations
 def receive_data():
     if request.method == "POST":
         subject = request.form["subject"]
