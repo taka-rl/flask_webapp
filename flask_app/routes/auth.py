@@ -1,12 +1,18 @@
 from flask import Blueprint, render_template, redirect, url_for, flash
 from flask_login import current_user, logout_user, login_user
 from werkzeug.security import generate_password_hash, check_password_hash
+from flask_app import login_manager
 from flask_app.utils import with_translations
 from flask_app.forms import RegisterForm, LoginForm
 from flask_app.models import db, User
 
 
 auth_bp = Blueprint('auth', __name__)
+
+
+@login_manager.user_loader
+def load_user(user_id):
+    return User.query.get(int(user_id))
 
 
 # Use Werkzeug to hash the user's password when creating a new user.

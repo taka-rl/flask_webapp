@@ -49,9 +49,3 @@ def create_app():
     app.register_blueprint(others_bp)
 
     return app
-
-
-# User loader callback function
-@login_manager.user_loader
-def load_user(user_id):
-    return User.query.get(int(user_id))  # Query the user by ID
