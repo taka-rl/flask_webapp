@@ -48,56 +48,7 @@ Note: You can register a new account but admin user is the admin as the id of Us
 
 
 ## Design
-### Database
-The ERD is as follows:  
-![image](https://github.com/user-attachments/assets/68e1780e-5b8a-4942-bcf1-afad40384a81)
-
-
-## Finished development:  
-- Store my favorite cafes in the database(SQLAlchemy)
-- Show you the weather information through OpenWeather API
-- Get the currency exchange rate between JPY and HUF through ExchangeRate API
-- Add pages such as Blog posts, hobby, contact, about, register/login/logout
-- Show some posts/create a post
-- Add register/login/logout function
-- Design database considering Place, BlogPost, User and Comment
-- Add user authentication function for adding/editing/deleting places (only admin can)
-- Add a send_email function in the contact.html
-- Add a language switcher
-
-## Current development
-- Organize main.py (See Directory structure)
-
-## Future development:
-- Improve the web page design
-- Error handling
-- CI/CD pipelines
-- Make sure all the functionality/Unit testing/API testing
-- Add functions to add/delete users by admin
-- Introduce a chatbot
-- Deploy the web page
-
-
-## Directory structure
-### Current structure
-    ├── instance                # database file
-    ├── static                  # static files
-    │   ├── assets              # img files
-    │   ├── css                 # css file related to bootstrap
-    │   ├── js                  # js file related to bootstrap
-    │   └── translations        # language json files
-    ├── templates               # route html files
-    ├── main.py                 # main flask app file
-    ├── form.py                 # main flask app file
-    ├── currency.py             # forms
-    ├── weather.py              # weather API
-    ├── weather.py              # currency API
-    ├── .gitignore
-    ├── Procfile                 
-    ├── requirements.txt
-    └── README.md
-
-### Updated structure
+### Directory structure
     ├── instance                # database file
     ├── static                  # static files
     │   ├── assets              # img files
@@ -123,3 +74,32 @@ The ERD is as follows:
     ├── Procfile                 
     ├── requirements.txt
     └── README.md
+
+### Database
+The ERD is as follows:  
+![image](https://github.com/user-attachments/assets/68e1780e-5b8a-4942-bcf1-afad40384a81)
+
+
+## Finished development:  
+- Store my favorite cafes in the database(SQLAlchemy)
+- Show you the weather information through OpenWeather API
+- Get the currency exchange rate between JPY and HUF through ExchangeRate API
+- Add pages such as Blog posts, hobby, contact, about, register/login/logout
+- Show some posts/create a post
+- Add register/login/logout function
+- Design database considering Place, BlogPost, User and Comment
+- Add user authentication function for adding/editing/deleting places (only admin can)
+- Add a send_email function in the contact.html
+- Add a language switcher
+- Organize main.py (See Directory structure)
+
+## Current development
+- Error handling
+
+## Future development:
+- Improve the web page design
+- CI/CD pipelines
+- Make sure all the functionality/Unit testing/API testing
+- Add functions to add/delete users by admin
+- Introduce a chatbot
+- Deploy the web page
