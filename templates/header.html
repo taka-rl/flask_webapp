@@ -62,7 +62,7 @@
             <li class="nav-item">
               <a
                 class="nav-link px-lg-3 py-3 py-lg-4"
-                href="{{ url_for('get_all_posts') }}"
+                href="{{ url_for('blog.get_all_posts') }}"
                 >Home</a
               >
             </li>
@@ -71,14 +71,14 @@
             <li class="nav-item">
               <a
                 class="nav-link px-lg-3 py-3 py-lg-4"
-                href="{{ url_for('login') }}"
+                href="{{ url_for('auth.login') }}"
                 >{{ g.translations['menu']['login'] }}</a
               >
             </li>
             <li class="nav-item">
               <a
                 class="nav-link px-lg-3 py-3 py-lg-4"
-                href="{{ url_for('register') }}"
+                href="{{ url_for('auth.register') }}"
                 >{{ g.translations['menu']['register'] }}</a
               >
             </li>
@@ -86,7 +86,7 @@
             <li class="nav-item">
               <a
                 class="nav-link px-lg-3 py-3 py-lg-4"
-                href="{{ url_for('logout') }}"
+                href="{{ url_for('auth.logout') }}"
                 >{{ g.translations['menu']['logout'] }}</a
               >
             </li>
@@ -94,14 +94,14 @@
             <li class="nav-item">
               <a
                 class="nav-link px-lg-3 py-3 py-lg-4"
-                href="{{ url_for('about') }}"
+                href="{{ url_for('about.about') }}"
                 >{{ g.translations['menu']['about'] }}</a
               >
             </li>
             <li class="nav-item">
               <a
                 class="nav-link px-lg-3 py-3 py-lg-4"
-                href="{{ url_for('collection') }}"
+                href="{{ url_for('collection.collection') }}"
                 >{{ g.translations['menu']['collection'] }}</a
               >
             </li>
@@ -109,7 +109,7 @@
             <li class="nav-item">
               <a
                 class="nav-link px-lg-3 py-3 py-lg-4"
-                href="{{ url_for('useful_info') }}"
+                href="{{ url_for('useful_info.useful_info') }}"
                 >{{ g.translations['menu']['useful_info'] }}</a
               >
             </li>
@@ -117,16 +117,16 @@
             <li class="nav-item">
               <a
                 class="nav-link px-lg-3 py-3 py-lg-4"
-                href="{{ url_for('contact') }}"
+                href="{{ url_for('contact.contact') }}"
                 >{{ g.translations['menu']['contact'] }}</a
               >
             </li>
               <ul class="navbar-nav ms-auto py-4 py-lg-0">
                 <li class="nav-item">
-                  <a class="nav-link" href="{{ url_for('switch_language', lang='en') }}">English</a>
+                  <a class="nav-link" href="{{ url_for('others.switch_language', lang='en') }}">English</a>
                 </li>
                 <li class="nav-item">
-                  <a class="nav-link" href="{{ url_for('switch_language', lang='jp') }}">日本語</a>
+                  <a class="nav-link" href="{{ url_for('others.switch_language', lang='jp') }}">日本語</a>
                 </li>
               </ul>
           </ul>

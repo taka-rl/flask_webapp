@@ -25,7 +25,7 @@
         <div class="container">
         <h2>Currency </h2>
         <p class="lead">Check the currency exchange rate between Japanese Yen and Hungarian Forint</p>
-        <form method="post" action="{{ url_for('get_currency') }}">
+        <form method="post" action="{{ url_for('useful_info.get_currency') }}">
             <button type="submit">Check the currency exchange rate!</button>
         </form>
         </div>
@@ -33,7 +33,7 @@
         <div class="container">
         <h2 class="">Weather </h2>
         <p class="lead">Check the weather?</p>
-        <form method="post" action="{{ url_for('show_weather') }}">
+        <form method="post" action="{{ url_for('useful_info.show_weather') }}">
             <input name="loc" type="text" placeholder="Input the location..." required>
             <button type="submit">Check the wearther!</button>
         </form>

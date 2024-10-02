@@ -25,7 +25,7 @@ def load_translations(lang):
             return json.load(f)
     except FileNotFoundError:
         # default to English if the file is not found
-        with open(f'static/translations/en.json', encoding='utf-8') as f:
+        with open(f'../static/translations/en.json', encoding='utf-8') as f:
             return json.load(f)
 
 
