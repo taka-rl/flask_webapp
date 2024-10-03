@@ -92,14 +92,15 @@ The ERD is as follows:
 - Add a send_email function in the contact.html
 - Add a language switcher
 - Organize main.py (See Directory structure)
+- Add Error handling
 
 ## Current development
-- Error handling
+- Testing
+- Documentation
 
 ## Future development:
 - Improve the web page design
 - CI/CD pipelines
-- Make sure all the functionality/Unit testing/API testing
 - Add functions to add/delete users by admin
 - Introduce a chatbot
 - Deploy the web page
