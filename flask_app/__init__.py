@@ -2,16 +2,16 @@ from flask_bootstrap import Bootstrap5
 from flask_ckeditor import CKEditor
 from flask import Flask
 from flask_login import LoginManager
-import os
 from dotenv import load_dotenv
 
 from flask_app.models import User
 from flask_app.models import db
+from flask_app.config import config
 
 login_manager = LoginManager()
 
 
-def create_app():
+def create_app(config_name):
     # Load environment variables from .env file
     load_dotenv()
 
@@ -20,9 +20,11 @@ def create_app():
     ckeditor = CKEditor()
     bootstrap = Bootstrap5()
 
+    # Create Flask app instance
     app = Flask(__name__, template_folder='../templates', static_folder='../static')
-    app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
-    app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('SQLALCHEMY_DATABASE_URI')
+
+    # Load the appropriate config for the environment
+    app.config.from_object(config[config_name])
 
     # Initialize app with extentions
     db.init_app(app)
