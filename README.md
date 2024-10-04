@@ -55,6 +55,10 @@ Note: You can register a new account but admin user is the admin as the id of Us
     │   ├── js                  # js file related to bootstrap
     │   └── translations        # language json files
     ├── templates               # route html files
+    ├── tests                   # tests
+    │   ├── conftest.py         # set up for testing
+    │   ├── test_auth.py        # test for auth routes
+    │   └── other routes        # will be committed later
     ├── flask_app               
     │   ├── __init__.py         # Initialize Flask app and extensions
     │   ├── forms.py            # Forms

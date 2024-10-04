@@ -13,7 +13,7 @@ class DevelopmentConfig(Config):
 
 class TestingConfig(Config):
     TESTING = True
-    SQLALCHEMY_DATABASE_URI = 'sqlite:///test.db'  # 'sqlite:///:memory:'  # In-memory database for testing
+    SQLALCHEMY_DATABASE_URI = 'sqlite:///:memory:'  # In-memory database for testing
     WTF_CSRF_ENABLED = False  # Disable CSRF for testing
 
 
