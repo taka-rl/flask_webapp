@@ -13,21 +13,24 @@ This is a Flask web app example where I have been utilizing gained skills and kn
 
 
 ## Preparation to use
-1. Run the following command for the libraries:
-   
+1. Make sure the config_name as an argument of create_app function in main.py  
+      ```app = create_app(config_name='development')```  
+   Since it is still under development, 'production' has not been supported yet.
+
+2. Run the following command for the libraries:  
    On Windows type:
    ```python -m pip install -r requirements.txt```  
    On MacOS type:
    ```pip3 install -r requirements.txt```
 
-2. Create API Keys if you would like to use "Useful Information function" in the useful_info.html.  
+3. Create API Keys if you would like to use "Useful Information function" in the useful_info.html.  
    OpenWeather API: https://openweathermap.org/api  
    ExchangeRate API: https://www.exchangerate-api.com/
 
-3. Get an App password on Google if you would like to use email sender function in contact.html  
+4. Get an App password on Google if you would like to use email sender function in contact.html  
    How to create App password → https://knowledge.workspace.google.com/kb/how-to-create-app-passwords-000009237?hl=ja
 
-4. Create .env file including the following variables:
+5. Create .env file including the following variables:
    ```
    SECRET_KEY=Type Your Secret Key  # Flask Secret Key
    WEATHER_API_KEY = 'Replace Your API Key set at 2'  # OpenWeather API
@@ -35,8 +38,8 @@ This is a Flask web app example where I have been utilizing gained skills and kn
    MYEMAIL = 'Your Email Address set at 3'
    EMAIL_PASSWORD = 'App Password set at 3'
    ```
-5. Run main.py
-6. Use one of the accounts written as below to Login
+6. Run main.py
+7. Use one of the accounts written as below to Login
 - admin user:  
    email: admin@email.com  
    password: admin  
@@ -107,3 +110,8 @@ The ERD is as follows:
 - Add functions to add/delete users by admin
 - Introduce a chatbot
 - Deploy the web page
+
+
+## Testing
+The section will be updated as it is under development.  
+pytest-flask is used for testing.
