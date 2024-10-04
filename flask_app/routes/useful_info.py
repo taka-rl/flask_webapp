@@ -5,6 +5,7 @@ useful_info_bp = Blueprint('useful_info', __name__)
 
 
 @useful_info_bp.route("/useful_info")
+@admin_only
 @with_translations
 def useful_info():
     return render_template("useful_info.html")

@@ -27,7 +27,7 @@ def register():
 
         if user:
             flash("You've already sighed up with that email, login instead!")
-            return redirect(url_for('login'))
+            return redirect(url_for('auth.login'))
 
         else:
             hash_and_salted_password = generate_password_hash(password=form.password.data,
@@ -63,10 +63,10 @@ def login():
         # Check stored password hash against entered password hashed
         if not user:
             flash("That email does not exist, please try again!")
-            return redirect(url_for('login'))
+            return redirect(url_for('auth.login'))
         elif not check_password_hash(user.password, password):
             flash("Password incorrect, please try again!")
-            return redirect(url_for('login'))
+            return redirect(url_for('auth.login'))
         else:
             login_user(user)
             return redirect(url_for('blog.get_all_posts'))

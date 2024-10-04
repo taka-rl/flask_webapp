@@ -29,7 +29,6 @@ This is a Flask web app example where I have been utilizing gained skills and kn
 
 4. Create .env file including the following variables:
    ```
-   SQLALCHEMY_DATABASE_URI=sqlite:///posts.db  # Database
    SECRET_KEY=Type Your Secret Key  # Flask Secret Key
    WEATHER_API_KEY = 'Replace Your API Key set at 2'  # OpenWeather API
    ExchangeRate_API_KEY = 'Replace Your API Key set at 2'  # ExchangeRate API
