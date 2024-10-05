@@ -2,7 +2,7 @@ from flask_bootstrap import Bootstrap5
 from flask_ckeditor import CKEditor
 from flask import Flask
 from flask_login import LoginManager
-from dotenv import load_dotenv
+
 
 from flask_app.models import User
 from flask_app.models import db
@@ -12,9 +12,6 @@ login_manager = LoginManager()
 
 
 def create_app(config_name):
-    # Load environment variables from .env file
-    load_dotenv()
-
     # Initialize extensions
     # db = SQLAlchemy()  db is defined in models.py
     ckeditor = CKEditor()

@@ -44,7 +44,7 @@ def test_logout(client):
     })
 
     # Log in
-    client.post('/register', data={
+    client.post('/login', data={
         'email': 'test@email.com',
         'password': 'test',
         'name': 'Test User'
@@ -53,4 +53,4 @@ def test_logout(client):
     # Test for logout
     response = client.get('/logout')
     assert response.status_code == 302
-    assert b"Login" in response.data
+    assert b"logout" in response.data

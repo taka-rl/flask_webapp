@@ -1,14 +1,10 @@
 import pytest
 from flask_app import create_app
 from flask_app.models import db
-from dotenv import load_dotenv
 
 
 @pytest.fixture
 def app():
-    # Load environment variables from .env file
-    load_dotenv()
-
     app = create_app(config_name='testing')
 
     with app.app_context():
