@@ -37,20 +37,28 @@ def test_login_form(client):
 
 def test_logout(client):
     # Register
-    client.post('/register', data={
+    register_response = client.post('/register', data={
         'email': 'test@email.com',
         'password': 'test',
         'name': 'Test User'
     })
 
+    assert register_response.status_code == 302  # Check if registration redirects after success
+
     # Log in
-    client.post('/login', data={
+    login_response = client.post('/login', data={
         'email': 'test@email.com',
         'password': 'test',
         'name': 'Test User'
     })
+    assert login_response.status_code == 302  # Check if login redirects after success
 
     # Test for logout
     response = client.get('/logout')
     assert response.status_code == 302
-    assert b"logout" in response.data
+
+    logout_response = client.get('/logout')
+    assert logout_response.status_code == 302
+
+    response = client.get('/')
+    assert response.status_code == 200

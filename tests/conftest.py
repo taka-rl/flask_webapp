@@ -12,9 +12,6 @@ def app():
         yield app
         db.drop_all()  # Clean up after tests
 
-    # Print the SECRET_KEY to verify it's being loaded
-    print(f"\nSECRET_KEY in tests: {app.config['SECRET_KEY']}\n")
-
 
 @pytest.fixture
 def client(app):
