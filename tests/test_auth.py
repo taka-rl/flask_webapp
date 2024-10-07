@@ -54,9 +54,6 @@ def test_logout(client):
     assert login_response.status_code == 302  # Check if login redirects after success
 
     # Test for logout
-    response = client.get('/logout')
-    assert response.status_code == 302
-
     logout_response = client.get('/logout')
     assert logout_response.status_code == 302
 
