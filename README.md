@@ -88,7 +88,8 @@ This is a Flask web app example where I have been utilizing gained skills and kn
 
 ### Database
 The ERD is as follows:  
-![image](https://github.com/user-attachments/assets/68e1780e-5b8a-4942-bcf1-afad40384a81)
+![image](https://github.com/user-attachments/assets/9d89c929-c464-4739-babe-ab8b95710c22)
+
 
 ### User Role
 There are three roles:  
