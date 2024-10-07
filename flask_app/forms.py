@@ -4,6 +4,11 @@ from wtforms.validators import DataRequired, URL, Email
 from flask_ckeditor import CKEditorField
 
 
+class CSRFProtectionForm(FlaskForm):
+    """ This form has no fields, but it includes a CSRF token"""
+    pass
+
+
 # WTForm for creating a blog post
 class CreatePostForm(FlaskForm):
     title = StringField("Blog Post Title", validators=[DataRequired()])

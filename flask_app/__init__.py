@@ -38,6 +38,7 @@ def create_app(config_name):
     from flask_app.routes.contact import contact_bp
     from flask_app.routes.others import others_bp
     from flask_app.routes.errors import errors_bp
+    from flask_app.routes.admin import admin_bp
 
     # Register blueprints
     app.register_blueprint(auth_bp)
@@ -48,6 +49,7 @@ def create_app(config_name):
     app.register_blueprint(contact_bp)
     app.register_blueprint(others_bp)
     app.register_blueprint(errors_bp)
+    app.register_blueprint(admin_bp)
 
     # Create the database table
     with app.app_context():

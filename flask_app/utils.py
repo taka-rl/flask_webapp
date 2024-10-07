@@ -6,7 +6,7 @@ from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from functools import wraps
 from typing import Any
-from flask import abort, session, g
+from flask import abort, session, g, flash
 from flask_login import current_user
 
 # API KEY OpenWeather
@@ -17,6 +17,7 @@ BASE_CURRENCY = 'JPY'
 TARGET_CURRENCY = 'HUF'
 
 ADMIN_NAME = os.getenv('ADMIN_NAME')
+SUPER_ADMIN = os.getenv('SUPER_ADMIN')
 
 
 def load_translations(lang):
@@ -38,13 +39,31 @@ def with_translations(f):
     return decorated_function
 
 
+def is_super_admin(user):
+    return user.email == SUPER_ADMIN
+
+
+def has_role(user, role):
+    return user.role == role
+
+
 def admin_only(f):
     @wraps(f)
     def decorated_function(*args, **kwargs):
-        # OnlyIf id is not 1 then return abort with 403 error
-        if current_user.id != 1:
+        # OnlyIf role is not admin or super_admin then return abort with 403 error
+        if not (has_role(current_user, "admin") or is_super_admin(current_user)):
             return abort(code=403)
         # Otherwise continue with the route function
+        return f(*args, **kwargs)
+    return decorated_function
+
+
+def super_admin_only(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        if not is_super_admin(current_user):
+            flash("Access restricted to super admins only.")
+            return abort(code=403)
         return f(*args, **kwargs)
     return decorated_function
 

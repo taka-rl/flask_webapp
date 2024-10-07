@@ -35,18 +35,22 @@ This is a Flask web app example where I have been utilizing gained skills and kn
    SECRET_KEY=Type Your Secret Key  # Flask Secret Key
    WEATHER_API_KEY = 'Replace Your API Key set at 2'  # OpenWeather API
    ExchangeRate_API_KEY = 'Replace Your API Key set at 2'  # ExchangeRate API
-   MYEMAIL = 'Your Email Address set at 3'
+   MYEMAIL = 'Your Email Address set at 3'  
    EMAIL_PASSWORD = 'App Password set at 3'
+   SUPER_ADMIN = 'admin@email.com'  # The SUPER_ADMIN is the one that can change user's role such as admin and user and delete users.
    ```
 6. Run main.py
 7. Use one of the accounts written as below to Login
-- admin user:  
+- Super admin user:  
    email: admin@email.com  
    password: admin  
-- non admin user:     
+- user:     
    email:test@email.com  
-   password: test@email.com  
-Note: You can register a new account but admin user is the admin as the id of User is 1 .
+   password: test@email.com
+8. Register a new user
+
+9. Change user's role on ('/admin-dashboard') route.
+
 
 
 ## Design
@@ -74,6 +78,7 @@ Note: You can register a new account but admin user is the admin as the id of Us
     │       ├── collection.py   # Collection-related routes
     │       ├── contact.py      # Contact-related routes
     │       ├── others.py       # Other (language switcher)
+    │       ├── admin.py        # Admin routes
     │       └── useful_info.py  # Useful_info-related routes
     ├── main.py                 # Run the app
     ├── .gitignore
@@ -84,6 +89,22 @@ Note: You can register a new account but admin user is the admin as the id of Us
 ### Database
 The ERD is as follows:  
 ![image](https://github.com/user-attachments/assets/68e1780e-5b8a-4942-bcf1-afad40384a81)
+
+### User Role
+There are three roles:  
+Super admin:
+- It is the one set the email on .env file as "SUPER_ADMIN".
+- It can switch user's role such as admin and user and delete users on ('/admin-dashboard') route.
+- It also contains admin features.  
+
+Admin:
+- It can post a new post/place, edit a post/place and delete a post/place.
+- It can comment on posts.
+
+User: 
+- When you register, the user role is user.
+- It can see the web page
+- It can comment on posts.
 
 
 ## Finished development:  
@@ -99,7 +120,8 @@ The ERD is as follows:
 - Add a language switcher
 - Organize main.py (See Directory structure)
 - Add Error handling
-
+- Add functions to change user role and delete users by admin
+ 
 ## Current development
 - Testing
 - Documentation
@@ -107,7 +129,6 @@ The ERD is as follows:
 ## Future development:
 - Improve the web page design
 - CI/CD pipelines
-- Add functions to add/delete users by admin
 - Introduce a chatbot
 - Deploy the web page
 

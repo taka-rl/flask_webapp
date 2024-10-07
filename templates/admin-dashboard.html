@@ -1,0 +1,67 @@
+{% include "header.html" %}
+
+<!-- Page Header -->
+<header
+  class="masthead"
+  style="background-image: url('../static/assets/img/login-bg.jpg')"
+>
+  <div class="container position-relative px-4 px-lg-5">
+    <div class="row gx-4 gx-lg-5 justify-content-center">
+      <div class="col-md-10 col-lg-8 col-xl-7">
+        <div class="page-heading">
+          <h1>Admin Dashboard</h1>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+{% block content %}
+
+  <div class="container">
+    <div class="row">
+      <!-- add a flash message here for users registering twice -->
+      {% with messages = get_flashed_messages() %}
+        {% if messages %}
+          {% for message in messages %}
+            <p class="flash">{{ message }}</p>
+          {% endfor %}
+        {% endif %}
+      {% endwith %}
+
+      <div class="col-lg-8 col-md-10 mx-auto">
+        <!-- render admin dashboard here-->
+        <table class="table table-light table-striped table-hover">
+          <tr>
+              <td>Name</td>
+              <td>Role</td>
+              <td>Change role</td>
+              <td>Delete the user</td>
+          </tr>
+          {% for user in all_users %}
+          <tr>
+              <td>{{ user.name }}</td>
+              <td>{{ user.role }}</td>
+              <td>
+                  <form action="{{ url_for('admin.change_role', user_id=user.id) }}" method="POST" class="btn btn-warning">
+                      {{ form.csrf_token }}
+                      <button type="submit">Change role</button>
+                  </form>
+              </td>
+              <td>
+                  <form action="{{ url_for('admin.delete_user', user_id=user.id) }}" method="POST">
+                      {{ form.csrf_token }}
+                      <button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this user?');">
+                          Delete this user</button>
+                  </form>
+              </td>
+          </tr>
+        {% endfor%}
+        </table>
+      </div>
+    </div>
+  </div>
+
+{% endblock %}
+
+{% include "footer.html" %}
