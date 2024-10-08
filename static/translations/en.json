@@ -15,7 +15,8 @@
     "login": "Login",
     "logout": "Log Out",
     "useful_info": "Useful_info",
-    "register": "register"
+    "register": "register",
+    "admin-dashboard": "Admin-Dashboard"
   },
   "contact": {
     "title": "contact",

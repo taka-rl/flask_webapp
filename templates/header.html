@@ -105,12 +105,19 @@
                 >{{ g.translations['menu']['collection'] }}</a
               >
             </li>
-            {% if current_user.id == 1: %}
+            {% if is_super_admin(): %}
             <li class="nav-item">
               <a
                 class="nav-link px-lg-3 py-3 py-lg-4"
                 href="{{ url_for('useful_info.useful_info') }}"
                 >{{ g.translations['menu']['useful_info'] }}</a
+              >
+            </li>
+            <li class="nav-item">
+              <a
+                class="nav-link px-lg-3 py-3 py-lg-4"
+                href="{{ url_for('admin.show_admin_dashboard') }}"
+                >{{ g.translations['menu']['admin-dashboard'] }}</a
               >
             </li>
             {% endif %}

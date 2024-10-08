@@ -31,8 +31,8 @@
           {{ g.translations['index']['posted_by'] }}
           <a href="#">{{post.blog_author.name}}</a>
           {{ g.translations['index']['on'] }} {{post.date}}
-          <!-- Only show delete button if user id is 1 (admin user) -->
-          {% if current_user.id == 1: %}
+          <!-- Only show delete button for admin users -->
+          {% if is_admin(): %}
           <a href="{{url_for('blog.delete_post', post_id=post.id) }}">✘</a>
           {% endif %}
         </p>
@@ -42,8 +42,8 @@
       {% endfor %}
 
       <!-- New Post -->
-      <!-- Only show Create Post button if user id is 1 (admin user) -->
-      {% if current_user.id == 1 %}
+      <!-- Only show Create Post for admin users -->
+      {% if is_admin() %}
       <div class="d-flex justify-content-end mb-4">
         <a
           class="btn btn-primary float-right"

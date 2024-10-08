@@ -39,19 +39,19 @@ def with_translations(f):
     return decorated_function
 
 
-def is_super_admin(user):
-    return user.email == SUPER_ADMIN
+def is_super_admin(user=current_user):
+    return user.is_authenticated and user.email == SUPER_ADMIN
 
 
-def has_role(user, role):
-    return user.role == role
+def is_admin(user=current_user):
+    return user.is_authenticated and user.role == 'admin'
 
 
 def admin_only(f):
     @wraps(f)
     def decorated_function(*args, **kwargs):
         # OnlyIf role is not admin or super_admin then return abort with 403 error
-        if not (has_role(current_user, "admin") or is_super_admin(current_user)):
+        if not (is_admin() or is_super_admin()):
             return abort(code=403)
         # Otherwise continue with the route function
         return f(*args, **kwargs)
@@ -61,7 +61,7 @@ def admin_only(f):
 def super_admin_only(f):
     @wraps(f)
     def decorated_function(*args, **kwargs):
-        if not is_super_admin(current_user):
+        if not is_super_admin():
             flash("Access restricted to super admins only.")
             return abort(code=403)
         return f(*args, **kwargs)

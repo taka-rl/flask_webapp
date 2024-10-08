@@ -7,6 +7,7 @@ from flask_login import LoginManager
 from flask_app.models import User
 from flask_app.models import db
 from flask_app.config import config
+from flask_app.utils import is_admin, is_super_admin
 
 login_manager = LoginManager()
 
@@ -54,5 +55,8 @@ def create_app(config_name):
     # Create the database table
     with app.app_context():
         db.create_all()
+
+    app.jinja_env.globals['is_admin'] = is_admin
+    app.jinja_env.globals['is_super_admin'] = is_super_admin
 
     return app

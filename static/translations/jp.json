@@ -15,7 +15,8 @@
     "login": "ログイン",
     "logout": "ログアウト",
     "useful_info": "お役立ち情報",
-    "register": "登録"
+    "register": "登録",
+    "admin-dashboard": "管理者専用ページ"
   },
   "contact": {
     "title": "お問い合わせ",

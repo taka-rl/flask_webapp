@@ -31,7 +31,7 @@
                 <td>Rating</td>
                 <td>Pricing</td>
                 <td>Category</td>
-                {% if current_user.id == 1: %}
+                {% if is_admin(current_user): %}
                 <td>Admin Options</td>
                 <td></td>
                 {% endif %}
@@ -45,7 +45,7 @@
                 <td>{{ place.rating }}</td>
                 <td>{{ place.pricing }}</td>
                 <td>{{ place.category }}</td>
-                {% if current_user.id == 1: %}
+                {% if is_admin(): %}
                 <td><a href="{{ url_for('collection.edit_place', place_id=place.id) }}">Edit</a></td>
                 <td><a href="{{ url_for('collection.delete_place', place_id=place.id) }}">Delete</a></td>
                 {% endif %}
@@ -55,7 +55,7 @@
   	  </table>
 
       <p><a href="{{ url_for('collection.collection') }}">Return to Collection page</a></p>
-        {% if current_user.id == 1: %}
+        {% if is_admin(current_user): %}
         <p><a href="{{ url_for('collection.add_place') }}">Would you like to add a new place?</a></p>
         {% endif %}
     </div>
