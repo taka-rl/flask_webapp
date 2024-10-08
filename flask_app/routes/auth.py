@@ -61,12 +61,10 @@ def login():
         user = db.session.execute(db.select(User).where(User.email == email)).scalar()
 
         # Check stored password hash against entered password hashed
-        if not user:
-            flash("That email does not exist, please try again!")
+        if not user and not check_password_hash(user.password, password):
+            flash("The email or password entered is wrong! Please try again!")
             return redirect(url_for('auth.login'))
-        elif not check_password_hash(user.password, password):
-            flash("Password incorrect, please try again!")
-            return redirect(url_for('auth.login'))
+
         else:
             login_user(user)
             return redirect(url_for('blog.get_all_posts'))
