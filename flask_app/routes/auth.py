@@ -2,7 +2,7 @@ from flask import Blueprint, render_template, redirect, url_for, flash
 from flask_login import current_user, logout_user, login_user
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_app import login_manager
-from flask_app.utils import with_translations
+from flask_app.utils import with_translations, is_super_admin
 from flask_app.forms import RegisterForm, LoginForm
 from flask_app.models import db, User
 
@@ -36,6 +36,10 @@ def register():
             new_user = User(email=form.email.data,
                             password=hash_and_salted_password,
                             name=form.name.data)
+
+            # if the entered email is super admin, its role is changed to Super Admin
+            if is_super_admin(new_user):
+                new_user.role = 'Super Admin'
 
             db.session.add(new_user)
             db.session.commit()
