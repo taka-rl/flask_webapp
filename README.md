@@ -126,7 +126,6 @@ User:
 ## Current development
 - Testing
 - Documentation
-- hear.html other html files which contain current_user.id==1
 
 ## Future development:
 - Improve the web page design
