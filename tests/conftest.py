@@ -30,11 +30,13 @@ def app():
 
 @pytest.fixture
 def client(app):
+    """Return a Flask test client"""
     return app.test_client()
 
 
 @pytest.fixture
 def runner(app):
+    """Return a Flask test CLI runner"""
     return app.test_cli_runner()
 
 
