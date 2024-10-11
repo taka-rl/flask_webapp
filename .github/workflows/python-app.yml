@@ -5,7 +5,7 @@ name: Python application
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [ "main", "2-add-github-workflow" ]
   pull_request:
     branches: [ "main" ]
 
