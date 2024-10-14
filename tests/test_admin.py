@@ -27,7 +27,7 @@ def test_change_user_role(super_admin_client):
     assert response.status_code == 302
 
     # Verify the role has been changed
-    user = User.query.get(user.id)
+    user = db.session.get(User, user.id)
     assert user.role == 'admin'
 
 

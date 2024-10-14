@@ -126,6 +126,7 @@ User:
 ## Current development
 - Testing
 - Documentation
+- Add github actions, which is python-app.yml to execute pytest
 
 ## Future development:
 - Improve the web page design
