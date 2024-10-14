@@ -24,3 +24,10 @@ def forbidden(error):
 @with_translations
 def server_error(error):
     return render_template('500.html'), 500
+
+
+# temporal route for testing 500 errors
+@errors_bp.route('/trigger-500')
+@with_translations
+def trigger_500():
+    return render_template('500.html'), 500
