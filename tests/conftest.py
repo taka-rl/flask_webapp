@@ -40,8 +40,11 @@ def runner(app):
 @pytest.fixture
 def super_admin_client(client):
     """Log in as the super admin and return the authenticated client."""
-    client.post('/login', data={
+    login_response = client.post('/login', data={
         'email': SUPER_ADMIN_EMAIL,
         'password': SUPER_ADMIN_PASSWORD
-    })
+    }, follow_redirects=True)
+
+    # Make sure if login was successful
+    assert login_response.status_code == 200
     return client

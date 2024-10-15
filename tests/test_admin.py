@@ -12,6 +12,9 @@ def test_check_super_admin_exist(client):
 
 def test_admin_dashboard_access(super_admin_client):
     response = super_admin_client.get('/admin-dashboard')
+
+    print(response.data)  # Add logging for debugging
+
     assert response.status_code == 200  # Check if registration redirects after success
     assert b'Admin Dashboard' in response.data
 
