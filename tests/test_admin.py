@@ -37,6 +37,9 @@ def test_change_user_role(super_admin_client):
 
     # Super admin changes the role of the new user
     response = super_admin_client.post(f'/admin/change-role/{user.id}')
+
+    print(response.data)  # Add logging for debugging
+
     assert response.status_code == 302
 
     # Verify the role has been changed
@@ -61,6 +64,9 @@ def test_delete_user(super_admin_client):
 
     # Super admin changes the role of the new user
     response = super_admin_client.post(f'/admin/delete-user/{user.id}')
+
+    print(response.data)  # Add logging for debugging
+
     assert response.status_code == 302
 
     # Verify the user exists in the database
