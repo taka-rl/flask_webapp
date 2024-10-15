@@ -1,3 +1,15 @@
+from flask_app.models import User, db
+from werkzeug.security import generate_password_hash
+from parameters import TEST_NAME, TEST_EMAIL, TEST_PASSWORD, SUPER_ADMIN_EMAIL, SUPER_ADMIN_PASSWORD
+
+
+def test_check_super_admin_exist(client):
+    # Verify the super admin exists in the database
+    super_admin_user = User.query.filter_by(email=SUPER_ADMIN_EMAIL).first()
+    assert super_admin_user is not None
+    assert super_admin_user.role == 'Super Admin'
+
+
 def test_admin_dashboard_access(super_admin_client):
     response = super_admin_client.get('/admin-dashboard')
     assert response.status_code == 200  # Check if registration redirects after success
@@ -6,11 +18,9 @@ def test_admin_dashboard_access(super_admin_client):
 
 def test_change_user_role(super_admin_client):
     # Create a new user manually for testing
-    from flask_app.models import User, db
-    from werkzeug.security import generate_password_hash
-    new_user = User(name='Test User',
-                    email='test@email.com',
-                    password=generate_password_hash('test')
+    new_user = User(name=TEST_NAME,
+                    email=TEST_EMAIL,
+                    password=generate_password_hash(TEST_PASSWORD)
                     )
 
     with super_admin_client.application.app_context():
@@ -18,7 +28,7 @@ def test_change_user_role(super_admin_client):
         db.session.commit()
 
     # Verify the user exists in the database
-    user = User.query.filter_by(email='test@email.com').first()
+    user = User.query.filter_by(email=TEST_EMAIL).first()
     assert user is not None
     assert user.role == 'user'
 
@@ -33,10 +43,9 @@ def test_change_user_role(super_admin_client):
 
 def test_delete_user(super_admin_client):
     # Create a new user manually for testing
-    from flask_app.models import User, db
-    new_user = User(name='Test User',
-                    email='test@email.com',
-                    password='test'
+    new_user = User(name=TEST_NAME,
+                    email=TEST_EMAIL,
+                    password=generate_password_hash(TEST_PASSWORD)
                     )
 
     with super_admin_client.application.app_context():
@@ -44,7 +53,7 @@ def test_delete_user(super_admin_client):
         db.session.commit()
 
     # Verify the user exists in the database
-    user = User.query.filter_by(email='test@email.com').first()
+    user = User.query.filter_by(email=TEST_EMAIL).first()
     assert user is not None
 
     # Super admin changes the role of the new user
@@ -52,5 +61,90 @@ def test_delete_user(super_admin_client):
     assert response.status_code == 302
 
     # Verify the user exists in the database
-    user = User.query.filter_by(email='test@email.com').first()
+    user = User.query.filter_by(email=TEST_EMAIL).first()
+    assert user is None
+
+
+# temp test codes using client
+def test_admin_dashboard_access_tmp(client):
+    # log in as super admin user
+    login_response = client.post('/login', data={
+        'email': SUPER_ADMIN_EMAIL,
+        'password': SUPER_ADMIN_PASSWORD
+    })
+    assert login_response.status_code == 302  # Expecting a redirect after a successful registration
+
+    response = client.get('/admin-dashboard')
+    assert response.status_code == 200  # Check if registration redirects after success
+    assert b'Admin Dashboard' in response.data
+
+
+def test_change_user_role_tmp(client):
+    # Create a new user manually for testing
+    new_user = User(name=TEST_NAME,
+                    email=TEST_EMAIL,
+                    password=generate_password_hash(TEST_PASSWORD)
+                    )
+
+    with client.application.app_context():
+        db.session.add(new_user)
+        db.session.commit()
+
+    # Verify the registered user exists in the database
+    user = User.query.filter_by(email=TEST_EMAIL).first()
+    assert user is not None
+    assert user.role == 'user'
+
+    # log in as super admin user
+    login_response = client.post('/login', data={
+        'email': SUPER_ADMIN_EMAIL,
+        'password': SUPER_ADMIN_PASSWORD
+    })
+    assert login_response.status_code == 302  # Expecting a redirect after a successful registration
+
+    response = client.get('/admin-dashboard')
+    assert response.status_code == 200  # Check if registration redirects after success
+    assert b'Admin Dashboard' in response.data
+
+    # Super admin changes the role of the new user
+    response = client.post(f'/admin/change-role/{user.id}')
+    assert response.status_code == 302
+
+    # Verify the role has been changed
+    user = db.session.get(User, user.id)
+    assert user.role == 'admin'
+
+
+def test_delete_user_tmp(client):
+    # Create a new user manually for testing
+    new_user = User(name='Test User',
+                    email=TEST_EMAIL,
+                    password=generate_password_hash(TEST_PASSWORD)
+                    )
+
+    with client.application.app_context():
+        db.session.add(new_user)
+        db.session.commit()
+
+    # Verify the user exists in the database
+    user = User.query.filter_by(email=TEST_EMAIL).first()
+    assert user is not None
+
+    # log in as super admin user
+    login_response = client.post('/login', data={
+        'email': SUPER_ADMIN_EMAIL,
+        'password': SUPER_ADMIN_PASSWORD
+    })
+    assert login_response.status_code == 302  # Expecting a redirect after a successful registration
+
+    response = client.get('/admin-dashboard')
+    assert response.status_code == 200  # Check if registration redirects after success
+    assert b'Admin Dashboard' in response.data
+
+    # Super admin changes the role of the new user
+    response = client.post(f'/admin/delete-user/{user.id}')
+    assert response.status_code == 302
+
+    # Verify the user exists in the database
+    user = User.query.filter_by(email=TEST_EMAIL).first()
     assert user is None
