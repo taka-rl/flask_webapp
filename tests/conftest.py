@@ -2,10 +2,7 @@ import pytest
 from flask_app import create_app
 from flask_app.models import db, User
 from werkzeug.security import generate_password_hash
-
-
-SUPER_ADMIN_EMAIL = 'admin@email.com'
-SUPER_ADMIN_PASSWORD = 'admin'
+from parameters import SUPER_ADMIN_EMAIL, SUPER_ADMIN_PASSWORD, SUPER_ADMIN_NAME
 
 
 @pytest.fixture
@@ -18,8 +15,8 @@ def app():
         # Create a super admin user
         super_admin = User(email=SUPER_ADMIN_EMAIL,
                            password=generate_password_hash(SUPER_ADMIN_PASSWORD),
-                           name='Super Admin',
-                           role='super_admin'
+                           name=SUPER_ADMIN_NAME,
+                           role='Super Admin'
                            )
         db.session.add(super_admin)
         db.session.commit()
