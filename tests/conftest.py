@@ -2,7 +2,7 @@ import pytest
 from flask_app import create_app
 from flask_app.models import db, User
 from werkzeug.security import generate_password_hash
-from parameters import SUPER_ADMIN_EMAIL, SUPER_ADMIN_PASSWORD, SUPER_ADMIN_NAME
+from tests.parameters import SUPER_ADMIN_EMAIL, SUPER_ADMIN_PASSWORD, SUPER_ADMIN_NAME
 
 
 @pytest.fixture

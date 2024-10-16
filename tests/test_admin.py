@@ -1,12 +1,14 @@
 from flask_app.models import User, db
 from werkzeug.security import generate_password_hash
-from parameters import TEST_NAME, TEST_EMAIL, TEST_PASSWORD, SUPER_ADMIN_EMAIL, SUPER_ADMIN_PASSWORD
+from parameters import TEST_NAME, TEST_EMAIL, TEST_PASSWORD, SUPER_ADMIN_EMAIL, SUPER_ADMIN_NAME
 
 
 def test_check_super_admin_exist(client):
-    # Verify the super admin exists in the database
+    # Verify the super admin stored in conftest.py exists in the database
     super_admin_user = User.query.filter_by(email=SUPER_ADMIN_EMAIL).first()
     assert super_admin_user is not None
+    assert super_admin_user.email == SUPER_ADMIN_EMAIL
+    assert super_admin_user.name == SUPER_ADMIN_NAME
     assert super_admin_user.role == 'Super Admin'
 
 
