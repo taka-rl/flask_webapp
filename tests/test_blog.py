@@ -80,7 +80,6 @@ def test_delete_post(super_admin_client):
 
     # Delete a post
     delete_response = super_admin_client.post(f'/delete-post/{post.id}')
-    print(delete_response.data)
     assert delete_response.status_code == 302
 
     # Verify whether the blog is deleted
