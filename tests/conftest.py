@@ -47,4 +47,5 @@ def super_admin_client(client):
 
     # Make sure if login was successful
     assert login_response.status_code == 200
+    assert b"admin-dashboard" in login_response.data
     return client
