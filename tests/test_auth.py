@@ -1,6 +1,6 @@
 from flask_app.models import User, db
 from werkzeug.security import generate_password_hash
-from parameters import TEST_NAME, TEST_EMAIL, TEST_PASSWORD
+from tests.parameters import TEST_NAME, TEST_EMAIL, TEST_PASSWORD
 
 
 def test_register_page(client):

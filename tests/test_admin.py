@@ -1,6 +1,6 @@
 from flask_app.models import User, db
 from werkzeug.security import generate_password_hash
-from parameters import TEST_NAME, TEST_EMAIL, TEST_PASSWORD, SUPER_ADMIN_EMAIL, SUPER_ADMIN_NAME
+from tests.parameters import TEST_NAME, TEST_EMAIL, TEST_PASSWORD, SUPER_ADMIN_EMAIL, SUPER_ADMIN_NAME
 
 
 def test_check_super_admin_exist(client):
