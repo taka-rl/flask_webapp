@@ -173,7 +173,6 @@ def get_weather_info(location: str) -> dict[str, Any]:
     response = requests.get(url)
     if response.status_code == 200:
         data = response.json()  # Parse the JSON response
-        print(data)
 
         weather_data = {'temperature': data['main']['temp'],
                         'max_temperature': data['main']['temp_max'],
