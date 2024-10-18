@@ -6,20 +6,17 @@ def test_access_useful_info_page(super_admin_client):
     assert b'Weather' in response.data
 
 
+# comment out due to errors on GitHub actions
+'''
 def test_currency_api(super_admin_client):
-    pass
-    '''
     response = super_admin_client.post('/currency')
     assert response.status_code == 200
     assert b'base_currency' in response.data
     assert b'exchange_rate' in response.data
     assert b'target_currency' in response.data
-    '''
 
 
 def test_weather_api(super_admin_client):
-    pass
-    '''
     response = super_admin_client.post('/weather', data={
         'loc': 'Budapest'
     })
@@ -33,4 +30,4 @@ def test_weather_api(super_admin_client):
     assert b'Pressure' in response.data
     assert b'Humidity' in response.data
     assert b'Description' in response.data
-    '''
+'''

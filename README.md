@@ -70,9 +70,9 @@ This is a Flask web app example where I have been utilizing gained skills and kn
     │   ├── test_auth.py        # test for auth route
     │   ├── test_blog.py        # test for blog route
     │   ├── test_collection.py  # test for collection route
+    │   ├── test_contact.py     # test for contact route
     │   ├── test_error.py       # test for error route
-    │   ├── test_useful_info.py # test for useful_info route
-    │   └── other routes        # will be committed later
+    │   └── test_useful_info.py # test for useful_info route
     ├── flask_app               
     │   ├── __init__.py         # Initialize Flask app and extensions
     │   ├── forms.py            # Forms
