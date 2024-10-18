@@ -64,7 +64,14 @@ This is a Flask web app example where I have been utilizing gained skills and kn
     ├── templates               # route html files
     ├── tests                   # tests
     │   ├── conftest.py         # set up for testing
-    │   ├── test_auth.py        # test for auth routes
+    │   ├── parameters.py       # parameters for test
+    │   ├── test_about.py       # test for about route
+    │   ├── test_admin.py       # test for admin route
+    │   ├── test_auth.py        # test for auth route
+    │   ├── test_blog.py        # test for blog route
+    │   ├── test_collection.py  # test for collection route
+    │   ├── test_error.py       # test for error route
+    │   ├── test_useful_info.py # test for useful_info route
     │   └── other routes        # will be committed later
     ├── flask_app               
     │   ├── __init__.py         # Initialize Flask app and extensions
