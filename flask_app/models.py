@@ -74,7 +74,7 @@ class Place(db.Model):
     location: Mapped[str] = mapped_column(String(50), nullable=False)
     open_time: Mapped[str] = mapped_column(String(10), nullable=True)
     close_time: Mapped[str] = mapped_column(String(10), nullable=True)
-    pricing: Mapped[float] = mapped_column(String(15), nullable=True)
+    pricing: Mapped[str] = mapped_column(String(15), nullable=True)
     rating: Mapped[float] = mapped_column(Float, nullable=True)
     category: Mapped[str] = mapped_column(String(15), nullable=True)
     location_url: Mapped[str] = mapped_column(String(250), nullable=True)

@@ -2,10 +2,7 @@ import pytest
 from flask_app import create_app
 from flask_app.models import db, User
 from werkzeug.security import generate_password_hash
-
-
-SUPER_ADMIN_EMAIL = 'admin@email.com'
-SUPER_ADMIN_PASSWORD = 'admin'
+from tests.parameters import SUPER_ADMIN_EMAIL, SUPER_ADMIN_PASSWORD, SUPER_ADMIN_NAME
 
 
 @pytest.fixture
@@ -18,8 +15,8 @@ def app():
         # Create a super admin user
         super_admin = User(email=SUPER_ADMIN_EMAIL,
                            password=generate_password_hash(SUPER_ADMIN_PASSWORD),
-                           name='Super Admin',
-                           role='super_admin'
+                           name=SUPER_ADMIN_NAME,
+                           role='Super Admin'
                            )
         db.session.add(super_admin)
         db.session.commit()
@@ -43,8 +40,12 @@ def runner(app):
 @pytest.fixture
 def super_admin_client(client):
     """Log in as the super admin and return the authenticated client."""
-    client.post('/login', data={
+    login_response = client.post('/login', data={
         'email': SUPER_ADMIN_EMAIL,
         'password': SUPER_ADMIN_PASSWORD
-    })
+    }, follow_redirects=True)
+
+    # Make sure if login was successful
+    assert login_response.status_code == 200
+    assert b"admin-dashboard" in login_response.data
     return client

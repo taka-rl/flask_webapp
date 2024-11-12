@@ -72,7 +72,7 @@ def edit_place(place_id):
     return render_template('add-place.html', place=place, form=edit_form, is_edit=True)
 
 
-@collection_bp.route('/delete-place/<int:place_id>')
+@collection_bp.route('/delete-place/<int:place_id>', methods=['POST'])
 @admin_only
 def delete_place(place_id):
     place_to_delete = db.get_or_404(Place, place_id)

@@ -88,7 +88,7 @@ def edit_post(post_id):
 
 
 # Use a decorator so only an admin user can delete a post
-@blog_bp.route("/delete-post/<int:post_id>")
+@blog_bp.route("/delete-post/<int:post_id>", methods=['POST'])
 @admin_only
 def delete_post(post_id):
     post_to_delete = db.get_or_404(BlogPost, post_id)
