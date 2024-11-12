@@ -5,7 +5,7 @@ name: Python application
 
 on:
   push:
-    branches: [ "main", "2-add-github-workflow" ]
+    branches: [ "main" ]
   pull_request:
     branches: [ "main" ]
 
@@ -32,6 +32,7 @@ jobs:
       run: echo "PYTHONPATH=$PYTHONPATH:$(pwd)" >> $GITHUB_ENV
     - name: Set environment variables
       run: echo "SECRET_KEY=${{ secrets.SECRET_KEY }}" >> $GITHUB_ENV
+
     - name: Lint with flake8
       run: |
         # stop the build if there are Python syntax errors or undefined names
