@@ -54,4 +54,3 @@ def test_403_page(client):
     # Check that the status code is 403 (forbidden) for non-admin users
     assert response.status_code == 403
     assert b"Forbidden" in response.data
-
